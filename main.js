@@ -28,7 +28,6 @@ const createWindow = () => {
         width: 1010,
         height: 720,
         // autoHideMenuBar: true,
-        // minimizabl: false,
         resizable: false,
 
         //Ativação do preload.js
@@ -53,34 +52,6 @@ const createWindow = () => {
 
 }
 
-// Janela sobre
-let about
-function aboutWindow() {
-    nativeTheme.themeSource = 'light'
-    // obter a janela principal
-    const main = BrowserWindow.getFocusedWindow()
-    // validação (se existir a janela principal)
-    if (main) {
-        about = new BrowserWindow({
-            width: 800,
-            height: 600,
-            autoHideMenuBar: true,
-            resizable: false,
-            minimizable: false,
-            // estabelecer uma relação hierárquica entre janelas
-            parent: main,
-            // criar uma janela modal (só retorna a principal quando encerrada)
-            modal: true,
-            webPreferences: {
-                preload: path.join(__dirname, 'preload.js')
-            }
-        })
-    }
-    //Carreegar o documento HTML na janela
-    about.loadFile('./src/views/sobre.html')
-}
-
-
 // Janela clientes
 let client
 
@@ -89,9 +60,10 @@ function clienteWindow() {
     const main = BrowserWindow.getFocusedWindow()
     if (main) {
         client = new BrowserWindow({
-            width: 1100,
-            height: 750,
-            //autoHideMenuBar: true,
+            width: 1010,
+            height: 650,
+            autoHideMenuBar: true,
+            resizable: false,
             parent: main,
             modal: true,
             //Ativação do preload.js
@@ -112,15 +84,43 @@ function osWindow() {
     const main = BrowserWindow.getFocusedWindow()
     if (main) {
         os = new BrowserWindow({
-            width: 1100,
-            height: 750,
-            //autoHideMenuBar: true,
+            width: 1010,
+            height: 650,
+            autoHideMenuBar: true,
+            resizable: false,
             parent: main,
             modal: true
         })
     }
     os.loadFile('./src/views/OS.html')
     os.center()
+}
+
+// Janela sobre
+let about
+function aboutWindow() {
+    nativeTheme.themeSource = 'light'
+    // obter a janela principal
+    const main = BrowserWindow.getFocusedWindow()
+    // validação (se existir a janela principal)
+    if (main) {
+        about = new BrowserWindow({
+            width: 800,
+            height: 550,
+            autoHideMenuBar: true,
+            resizable: false,
+            minimizable: false,
+            // estabelecer uma relação hierárquica entre janelas
+            parent: main,
+            // criar uma janela modal (só retorna a principal quando encerrada)
+            modal: true,
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js')
+            }
+        })
+    }
+    //Carreegar o documento HTML na janela
+    about.loadFile('./src/views/sobre.html')
 }
 
 //Iniciar aplicativo
@@ -282,7 +282,7 @@ ipcMain.on('new-client', async (event, client) => {
                 //Enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rotulo 'reset-form' do preload)
                 event.reply('reset-form')
             }
-        });
+        })
     } catch (error) {
         // Se o código de erro for 11000 (cpf duplicado) enviar uma mensagem ao usuario 
         if (error.code === 11000) {
@@ -293,7 +293,7 @@ ipcMain.on('new-client', async (event, client) => {
                 buttons: ['OK']
             }).then((result) => {
                 if (result.response === 0) {
-                    //Limpar a caixa de input do cpf, focar essa caixa e deixar a borda em vermelho
+                    event.reply('reset-cpf')
                 }
             })
         }

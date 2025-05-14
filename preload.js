@@ -26,3 +26,9 @@ contextBridge.exposeInMainWorld('api', {
 function dbStatus(message) {
     ipcRenderer.on('db-status', message)
 }
+
+// Tratamento de exceção CPF duplicado
+contextBridge.exposeInMainWorld('electron', {
+  sendMessage: (channel, data) => { ipcRenderer.send(channel, data) },
+  onReceiveMessage: (channel, callback) => { ipcRenderer.on(channel, callback) }
+})

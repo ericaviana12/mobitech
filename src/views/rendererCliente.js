@@ -16,10 +16,63 @@ function buscarCEP() {
             //Extração dos dados
             document.getElementById("inputAddressClient").value = dados.logradouro
             document.getElementById("inputNeighborhoodClient").value = dados.bairro
-            document.getElementById("inputTSateClient").value = dados.localidade
-            document.getElementById("uf").value = dados.uf
+            document.getElementById("inputCityClient").value = dados.localidade
+            document.getElementById("inputUfClient").value = dados.uf
         })
         .catch(error => console.log(error))
+}
+
+function mascaraTelefone(input) {
+    // Remove tudo o que não for número
+    let valor = input.value.replace(/\D/g, '')
+
+    // Aplica a máscara (DDD)XXXXX-XXXX
+    if (valor.length <= 2) {
+        input.value = `(${valor}`
+    } else if (valor.length <= 6) {
+        input.value = `(${valor.substring(0, 2)}) ${valor.substring(2)}`
+    } else {
+        input.value = `(${valor.substring(0, 2)}) ${valor.substring(2, 7)}-${valor.substring(7, 11)}`
+    }
+}
+
+function validarCPF(input) {
+    var cpf = input.value.replace(/\D/g, '') // Remove tudo o que não é número
+
+    // Verifica se o CPF tem 11 dígitos e se não é uma sequência de números iguais (ex: 11111111111)
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        input.setCustomValidity("CPF inválido!"); // Mensagem para CPF inválido
+        return false
+    }
+
+    // Calcula o primeiro dígito verificador
+    var soma = 0
+    var peso = 10
+    for (var i = 0; i < 9; i++) {
+        soma += cpf[i] * peso
+        peso--
+    }
+    var resto = soma % 11
+    var primeiroDigito = (resto < 2) ? 0 : 11 - resto
+    
+    // Calcula o segundo dígito verificador
+    soma = 0
+    peso = 11
+    for (var i = 0; i < 10; i++) {
+        soma += cpf[i] * peso
+        peso--
+    }
+    resto = soma % 11
+    var segundoDigito = (resto < 2) ? 0 : 11 - resto
+
+    // Verifica se os dois dígitos verificadores calculados são iguais aos informados
+    if (cpf[9] == primeiroDigito && cpf[10] == segundoDigito) {
+        input.setCustomValidity("") // Remove a mensagem de erro
+        return true
+    } else {
+        input.setCustomValidity("CPF inválido!"); // Mensagem para CPF inválido
+        return false
+    }
 }
 
 //Vetor global que sera usado na manipulação dos dados
@@ -27,33 +80,35 @@ let arrayClient = []
 
 // Capturar o foco na busca pelo nome cliente
 //A constante "foco" obtem o elemento html(input) indentificado como "searchClinet"
-const foco = document.getElementById('searchClient');
+const foco = document.getElementById('searchClient')
 
 //Iniciar a janela de clientes alterando as propriedades de alguns elementos
 document.addEventListener('DOMContentLoaded', () => {
-    //Desativar os botão 
-    btnUpdate.disabled = true;
-    btnDelete.disabled = true;
-    //Foco na busca do cliente
-    foco.focus();
-});
+    //Desativar os botões "atualizar" e "excluir"
+    btnUpdate.disabled = true
+    btnDelete.disabled = true
+    // Ativar o botão "adicionar"
+    btnCreate.disabled = false
+    //Iniciar o documento com foco na caixa de texto
+    foco.focus()
+})
 
 //captura dos dados dos inputs do formulário (Passo 1: fluxo)
-let frmClient = document.getElementById("frmClient");
-let nameClient = document.getElementById("inputNameClient");
-let cpfClient = document.getElementById("inputCPFClient");
-let emailClient = document.getElementById("inputEmailNameClient");
-let foneClient = document.getElementById("inputIPhoneClient");
-let cepClient = document.getElementById("inputCEPClient");
-let logClient = document.getElementById("inputAddressClient");
-let numClient = document.getElementById("inputNumberClient");
-let complementoClient = document.getElementById("inputComplementClient");
-let bairroClient = document.getElementById("inputNeighborhoodClient");
-let cidadeClient = document.getElementById("inputTSateClient");
-let ufClient = document.getElementById("inputUfClient");
+let frmClient = document.getElementById("frmClient")
+let nameClient = document.getElementById("inputNameClient")
+let cpfClient = document.getElementById("inputCPFClient")
+let emailClient = document.getElementById("inputEmailNameClient")
+let foneClient = document.getElementById("inputIPhoneClient")
+let cepClient = document.getElementById("inputCEPClient")
+let logClient = document.getElementById("inputAddressClient")
+let numClient = document.getElementById("inputNumberClient")
+let complementoClient = document.getElementById("inputComplementClient")
+let bairroClient = document.getElementById("inputNeighborhoodClient")
+let cidadeClient = document.getElementById("inputCityClient")
+let ufClient = document.getElementById("inputUfClient")
 
 //Captura do id do cliente (usado no delete e update)
-let id = document.getElementById('idClient');
+let id = document.getElementById('idClient')
 
 //========================================================
 //Manipulação da tecla "Enter"
@@ -88,7 +143,7 @@ frmClient.addEventListener('submit', async (event) => {
     //teste importante (recebimento dos dados do formulário) - passo 1 do fluxo
     console.log(nameClient.value, cpfClient.value, emailClient.value, foneClient.value, cepClient.value, logClient.value, numClient.value, complementoClient.value, bairroClient.value, cidadeClient.value, ufClient.value)
     // Limpa o CPF antes de salvar no banco
-    let cpfSemFormatacao = cpfClient.value.replace(/\D/g, "");
+    let cpfSemFormatacao = cpfClient.value.replace(/\D/g, "")
     //Crair um objeto para armazenar os dados do cliente antes de enviar ao main 
     const client = {
         nameCli: nameClient.value,
@@ -188,75 +243,21 @@ api.setClient((args) => {
 
 //FIM CRUD READ====================================================================
 
-//Reset form===================================================================
+// ==========================================================================
+// == Resetar o formulário ==================================================
+
 function resetForm() {
-    //Limpar os campos e resetar o formulário com as configurações pré definidas
-    location.reload() //Recarrega a página
+    // Recarregar a página
+    location.reload()
 }
 
-//Recebimento do pedido do main para resetar o formulário
+// Uso da API reserForm quando salvar, editar ou excluir um cliente
 api.resetForm((args) => {
     resetForm()
 })
 
-//Fim reset form===================================================================
-
-// === Função para aplicar máscara no CPF ===
-function aplicarMascaraCPF(campo) {
-    let cpf = campo.value.replace(/\D/g, ""); // Remove caracteres não numéricos
-
-    if (cpf.length > 3) cpf = cpf.replace(/^(\d{3})(\d)/, "$1.$2");
-    if (cpf.length > 6) cpf = cpf.replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3");
-    if (cpf.length > 9) cpf = cpf.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3-$4");
-
-    campo.value = cpf;
-}
-
-// === Função para validar CPF ===
-function validarCPF() {
-    let campo = document.getElementById('inputCPFClient');
-    let cpf = campo.value.replace(/\D/g, ""); // Remove caracteres não numéricos
-
-    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-        campo.style.borderColor = "red";
-        campo.style.color = "red";
-        return false;
-    }
-
-    let soma = 0, resto;
-
-    for (let i = 1; i <= 9; i++) soma += parseInt(cpf[i - 1]) * (11 - i);
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf[9])) {
-        campo.style.borderColor = "red";
-        campo.style.color = "red";
-        return false;
-    }
-
-    soma = 0;
-    for (let i = 1; i <= 10; i++) soma += parseInt(cpf[i - 1]) * (12 - i);
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf[10])) {
-        campo.style.borderColor = "red";
-        campo.style.color = "red";
-        return false;
-    }
-
-    campo.style.borderColor = "green";
-    campo.style.color = "green";
-    return true;
-}
-
-// Adicionar eventos para CPF
-cpfClient.addEventListener("input", () => aplicarMascaraCPF(cpfClient)); // Máscara ao digitar
-cpfClient.addEventListener("blur", validarCPF); // Validação ao perder o foco
-
-
-//parte 2, subir pro banco sem ponto
-
-// == CRUD Creat/Update ==================================
+// == Fim - Resetar o formulário ============================================
+// ==========================================================================
 
 // == CRUD Delete ==================================
 
