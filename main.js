@@ -123,10 +123,26 @@ function aboutWindow() {
     about.loadFile('./src/views/sobre.html')
 }
 
-//Iniciar aplicativo
+// Inicialização da aplicação (assincronismo)
 app.whenReady().then(() => {
     createWindow()
 
+    // Melhor local para estebelecer a conexão com o banco de dados
+    // No MongoDb é mais eficiente manter uma única conexão aberta durante todo o tempo de vida do aplicativo e fechar a conexão e encerrar quando o aplicativo for finalizado
+    // ipcMain.on (receber mensagem)
+    // db-connect (rótulo da mensagem)
+    ipcMain.on('db-connect', async (event) => {
+        // A linha abaixo estabelece a conexão com o banco de dados
+        await conectar()
+        // Enviar ao rendereizador uma mensagem para trocar a imagem do ícone do status do banco de dados (criar um delay de 0.5s ou 1s para sincronização com a nuvem)
+        setTimeout(() => {
+            // Enviar ao renderizador a mensagem "conectado"
+            // db-status (IPC - comunicação entre processos - autorizada pelo preload.js)
+            event.reply('db-status', "conectado")
+        }, 500) // 500ms = 0.5s
+    })
+
+    // Só ativar a janela principal se nenhuma outra estiver ativa
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow()
@@ -134,33 +150,22 @@ app.whenReady().then(() => {
     })
 })
 
+// Se o sistema não for MAC, encerrar a aplicação quando a janela for fechada
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
     }
 })
 
-//Reduzir logs não criticos
+// IMPORTANTE! Desconectar do banco de dados quando a aplicação for finalizada
+app.on('before-quit', async () => {
+    await desconectar()
+})
+
+// Reduzir a verbosidade de logs não críticos (devtools)
 app.commandLine.appendSwitch('log-level', '3')
 
-// iniciar a conexão com o banco de dados (pedido direto do preload.js)
-ipcMain.on('db-connect', async (event) => {
-    let conectado = await conectar()
-    // se conectado for igual a true
-    if (conectado) {
-        // enviar uma mensagem para o renderizador trocar o ícone
-        setTimeout(() => {
-            event.reply('db-status', "conectado")
-        }, 500)
-    }
-})
-
-// IMPORTANTE! Desconectar do banco de dados quando a aplicação for encerrada
-app.on('before-quit', () => {
-    desconectar()
-})
-
-//Templete do menu
+//Template do menu
 const template = [
     {
         label: 'Cadastro',
@@ -241,68 +246,8 @@ const template = [
     }
 ]
 
-// ===========================================================
-//Clientes - CRUD CREATE
 
-// Recebimento do objeto que contem os dados do cliente 
-ipcMain.on('new-client', async (event, client) => {
-    //Importante! Teste de recebimento dos dados do cliente
-    console.log(client)
-    // Cadastrar a  estrtura de dados no banco de dados no mongodb
-    try {
-        //Criar uma nova estrutura de dados usando a classe modelo
-        //Atenção! OS atributos precisam ser identicos ao modelo de dados clientes.js
-        //e os valores são definidos pelo conteúdo ao objeto client
-        const newClient = new clientModel({
-            nomeCliente: client.nameCli,
-            cpfCliente: client.cpfCli,
-            emailCliente: client.emailCli,
-            foneCliente: client.foneCli,
-            cepCliente: client.cepCli,
-            logradouroCliente: client.logfCli,
-            numeroCliente: client.numCli,
-            complementoCliente: client.complementoCli,
-            bairroCliente: client.bairroCli,
-            cidadeCliente: client.cidadeCli,
-            ufCliente: client.ufCli
-        })
-        //Salvar os dados dos clientes no banco de dados
-        await newClient.save()
-
-        //Messagem de confirmação
-        dialog.showMessageBox({
-            //Customização
-            type: 'info',
-            title: "Aviso",
-            message: "Cliente adicionando com sucesso",
-            buttons: ['OK']
-        }).then((result) => {
-            //Ação ao pressionar o botão
-            if (result.response === 0) {
-                //Enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rotulo 'reset-form' do preload)
-                event.reply('reset-form')
-            }
-        })
-    } catch (error) {
-        // Se o código de erro for 11000 (cpf duplicado) enviar uma mensagem ao usuario 
-        if (error.code === 11000) {
-            dialog.showMessageBox({
-                type: 'error',
-                title: "Atenção!",
-                message: "CPF já está cadastrado\nverifique se digitou corretamente",
-                buttons: ['OK']
-            }).then((result) => {
-                if (result.response === 0) {
-                    event.reply('reset-cpf')
-                }
-            })
-        }
-        console.log(error)
-    }
-})
-
-//Fim - Clientes - CRUD CREATE==============================
-
+//============================================================
 //Relátorio de clientes ======================================
 async function relatorioClientes() {
     try {
@@ -360,10 +305,11 @@ async function relatorioClientes() {
                 y += 10
             }
 
-            doc.text(c.nomeCliente, 14, y),
-                doc.text(c.emailCliente || "N/A", 130, y),
-                y += 10 //Quebra de linha
 
+            doc.text(String(c.nomeCliente || ''), 14, y)
+            doc.text(String(c.foneCliente || ''), 80, y)
+            doc.text(String(c.emailCliente || ''), 130, y)
+            y += 10
         })
 
         //Adicionar numeração automática de páginas
@@ -387,88 +333,205 @@ async function relatorioClientes() {
     }
 }
 
-//Crud Read ======================================================
+//= Fim - Relatório de clientes ==============================
+//============================================================
 
-//Validação de busca (preenchimento obrigatoria)
-ipcMain.on('validate-search', () => {
-    dialog.showMessageBox({
-        type: 'warning',
-        title: "Atenção!",
-        message: "Preencha o campo de busca",
-        buttons: ['OK']
-    })
-})
 
-ipcMain.on('search-name', async (event, name) => {
-    console.log("teste IPC search-name")
+// ===========================================================
+//Clientes - CRUD CREATE
 
-    //Passo 3 e 4: Busca dos dados do cliente no banco
-
-    //find({nomeCliente: name}) - busca pelo nome
-    //RegExp(name, i) - i (insensitive / Ignorar maiúsculo ou minúsculo)
+// Recebimento do objeto que contem os dados do cliente 
+ipcMain.on('new-client', async (event, client) => {
+    //Importante! Teste de recebimento dos dados do cliente
+    console.log(client)
+    // Cadastrar a  estrtura de dados no banco de dados no mongodb
     try {
-        const dataClient = await clientModel.find({
-            $or: [
-                { nomeCliente: new RegExp(name, 'i') },
-                { cpfCliente: new RegExp(name, 'i') }
-            ]
+        //Criar uma nova estrutura de dados usando a classe modelo
+        //Atenção! OS atributos precisam ser identicos ao modelo de dados clientes.js
+        //e os valores são definidos pelo conteúdo ao objeto client
+        const newClient = new clientModel({
+            nomeCliente: client.nameCli,
+            cpfCliente: client.cpfCli,
+            emailCliente: client.emailCli,
+            foneCliente: client.foneCli,
+            cepCliente: client.cepCli,
+            logradouroCliente: client.logCli,
+            numeroCliente: client.numCli,
+            complementoCliente: client.complementoCli,
+            bairroCliente: client.bairroCli,
+            cidadeCliente: client.cidadeCli,
+            ufCliente: client.ufCli
         })
-        console.log(dataClient)//Teste do pásso 3 e 4
+        //Salvar os dados dos clientes no banco de dados
+        await newClient.save()
 
-        //Melhoria de experiência do usuário (se o cliente não estiver cadastrado, alertar o usuário e questionar se ele quer capturar este cliente, se não quiser cadastrar, limpar os campos, se quiser cadastrar recortar o nome do cliente ou o cpf do campo de busca e colar no campo nome ou cpf).
-        //Se o vetor estiver vazio [] (cliente não cadastrado)
-        if (dataClient.length === 0) {
+        // Confirmação de cliente adicionado ao banco (uso do dialog)
+        dialog.showMessageBox({
+            type: 'info',
+            title: "Aviso",
+            message: "Cliente adicionado com sucesso",
+            buttons: ['OK']
+        }).then((result) => {
+            // se o botão OK for pressionando
+            if (result.response === 0) {
+                //enviar um pedido para o renderizador limpar os campos (preload.js)
+                event.reply('reset-form')
+            }
+        })
+
+    } catch (error) {
+        // Tratamento da exceção de CPF duplicado
+        if (error.code === 11000) {
             dialog.showMessageBox({
-                type: 'warning',
-                title: "Aviso",
-                message: "Cliente não cadastrado.\n Deseja cadastrar este cliente?",
-                defaultId: 0,
-                buttons: ['Sim', 'Não'] // [0,1]
+                type: 'error',
+                title: "ATENÇÃO!",
+                message: "CPF já cadastrado. \n Verfique o número digitado.",
+                buttons: ['OK']
             }).then((result) => {
+                // Se o botão OK for pressionado
                 if (result.response === 0) {
-                    // Enviar ao renderizador um pedido para setar od campod (recortar do campo de busca e colar no campo nome)
-                    event.reply('set-client')
-                } else {
-                    // Limpar o formulário
-                    event.reply('reset-form')
+                    event.reply('reset-cpf')
                 }
             })
+        } else {
+            console.log(error)
         }
+    }
 
-        //Passo 5: 
-        //Enviando os dados do cliente ao rendererCliente
-        //OBS: ipc só trabalha com string, então é necessario converter o JSON para JSON.stringify(dataClient)
-        event.reply('render-client', JSON.stringify(dataClient))
+})
+
+//Fim - Clientes - CRUD CREATE==============================
+
+
+//=============================================================
+//Crud Read ===================================================
+
+ipcMain.on('search-name', async (event, cliValor) => {
+    console.log("Valor de busca recebido:", cliValor)
+
+    try {
+        const valor = cliValor.trim()
+        const cpfRegex = /^\d{11}$/ // verifica se é CPF
+
+        // Se for CPF, busca pelo campo 'cpf'; senão, pelo campo 'nome'
+        const query = cpfRegex.test(valor.replace(/\D/g, ''))
+            ? { cpfCliente: new RegExp(valor, 'i') }
+            : { nomeCliente: new RegExp(valor, 'i') }
+
+        const client = await clientModel.find(query)
+
+        if (client.length === 0) {
+            dialog.showMessageBox({
+                type: 'warning',
+                title: 'Aviso',
+                message: 'Cliente não cadastrado. \nDeseja cadastrar este cliente?',
+                defaultId: 0,
+                buttons: ['Sim', 'Não']
+            }).then((result) => {
+                if (result.response === 0) {
+                    event.reply('set-name')
+                } else {
+                    event.reply('reset-form')
+                }
+            });
+        } else {
+            event.reply('render-client', JSON.stringify(client))
+        }
     } catch (error) {
-        console.log(error)
+        console.error("Erro ao buscar cliente:", error)
     }
 })
 
 //Fim Crud Read ======================================================
 
-//CRUD DELETE ================================================
 
-ipcMain.on('delete-client', async (event, id) => {
-    console.log(id)//Teste do passo 2 (recebimento do id)
+// ==========================================================================
+//CRUD UPDATE ====================================================================
 
+// Atualizar cliente no banco
+ipcMain.on('update-clientes', async (event, dadosAtualizados) => {
     try {
-        //IMPORTANTE - confirmar a exclusão
-        //Client é o nome da variável que representa a janela
-        const { response } = await dialog.showMessageBox(client, {
-            type: 'warning',
-            title: "Atenção",
-            message: "Deseja excluir este cliente?\nEsta ação não podera ser desfeita.",
-            buttons: ['Cancelar', 'Excluir'] //[0,1]
-        })
-        if (response === 1) {
-            console.log("teste")
-            //Passo 3: excluir o resgistro do cliente
-            const delClient = await clientModel.findByIdAndDelete(id)
-            event.reply('reset-form')
+        // Procurar o cliente pelo CPF (ou algum outro identificador único)
+        const cliente = await clientModel.findOne({ cpfCliente: dadosAtualizados.cpf })
+        if (!cliente) {
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Erro',
+                message: 'O CPF não pode ser alterado! Para corrigir esse dado, exclua o cliente e cadastre novamente.',
+                buttons: ['OK']
+            })
+            return
         }
+
+        // Atualizar os dados do cliente
+        cliente.nomeCliente = dadosAtualizados.nome
+        cliente.cpfCliente = dadosAtualizados.cpf
+        cliente.emailCliente = dadosAtualizados.email
+        cliente.foneCliente = dadosAtualizados.telefone
+        cliente.cepCliente = dadosAtualizados.cep
+        cliente.logradouroCliente = dadosAtualizados.logradouro
+        cliente.numeroCliente = dadosAtualizados.numero
+        cliente.complementoCliente = dadosAtualizados.complemento
+        cliente.bairroCliente = dadosAtualizados.bairro
+        cliente.cidadeCliente = dadosAtualizados.cidade
+        cliente.ufCliente = dadosAtualizados.uf
+
+
+        // Salvar no banco de dados
+        await cliente.save()
+
+        // Confirmação de sucesso
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Sucesso',
+            message: 'Cliente atualizado com sucesso!',
+            buttons: ['OK']
+        })
+
+        // Enviar uma mensagem para o renderer para resetar o formulário
+        event.reply('reset-form')
+
     } catch (error) {
         console.log(error)
+        dialog.showMessageBox({
+            type: 'error',
+            title: 'Erro',
+            message: 'Ocorreu um erro ao atualizar o cliente.',
+            buttons: ['OK']
+        })
     }
 })
 
-//FIM CRUD DELETE ================================================
+//FIM CRUD UPDATE ====================================================================
+// ==========================================================================
+
+
+//===========================================================================
+//= CRUD Delete =============================================================
+
+ipcMain.on('delete-client', async (event, cpf) => {
+  try {
+    const resultado = await clientModel.deleteOne({ cpfCliente: cpf })
+    if (resultado.deletedCount > 0) {
+      dialog.showMessageBox({
+        type: 'info',
+        title: 'Exclusão concluída',
+        message: 'Cliente excluído com sucesso!'
+      })
+      // Limpar formulário após exclusão
+      event.reply('reset-form')
+    } else {
+      dialog.showMessageBox({
+        type: 'warning',
+        title: 'Erro',
+        message: 'Cliente não encontrado para exclusão.'
+      })
+    }
+  } catch (erro) {
+    console.log(erro)
+    dialog.showErrorBox('Erro ao excluir cliente', erro.message)
+  }
+})
+
+//= Fim - CRUD Delete =======================================================
+//===========================================================================

@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Impedir a execução de scripts externos -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' ">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
     <!-- Título da janela -->
-    <title>Cadastro de clientes</title>
+    <title>Mobi Tech</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-    <!-- CSS Personalizado -->
+    <!-- CSS Personalizado ATENÇÃO!!! sempre após o CSS do bootstrap -->
     <link rel="stylesheet" href="../public/css/style.css">
 </head>
 
@@ -21,7 +21,7 @@
             <!--Buscar cliente-->
             <div class="col-sm-6">
                 <input type="text" class="form-control" id="searchClient" maxlength="30" spellcheck="false"
-                    placeholder="Digite o nome ou CPF para buscar...">
+                    placeholder="Digite o nome ou CPF">
             </div>
             <div class="col-sm-6">
                 <button type="button" class="btn btn-dark" id="btnRead" onclick="buscarCliente()">Buscar</button>
@@ -97,51 +97,51 @@
             <!--Cidade-->
             <div class="col-md-4">
                 <label for="inputCityClient" class="form-label">Cidade</label>
-                <input type="text" class="form-control" id="inputCityClient" spellcheck="false" maxlength="12"
-                    required>
+                <input type="text" class="form-control" id="inputCityClient" spellcheck="false" maxlength="12" required>
             </div>
 
             <div class="col-md-3">
                 <label for="inputUfClient" class="form-label">UF</label>
                 <select class="form-control" id="inputUfClient" name="UF" required>
-                        <option value="">Selecione</option>
-                        <option value="AC">AC</option>
-                        <option value="AL">AL</option>
-                        <option value="AP">AP</option>
-                        <option value="AM">AM</option>
-                        <option value="BA">BA</option>
-                        <option value="CE">CE</option>
-                        <option value="DF">DF</option>
-                        <option value="ES">ES</option>
-                        <option value="GO">GO</option>
-                        <option value="MA">MA</option>
-                        <option value="MT">MT</option>
-                        <option value="MS">MS</option>
-                        <option value="MG">MG</option>
-                        <option value="PA">PA</option>
-                        <option value="PB">PB</option>
-                        <option value="PR">PR</option>
-                        <option value="PE">PE</option>
-                        <option value="PI">PI</option>
-                        <option value="RJ">RJ</option>
-                        <option value="RN">RN</option>
-                        <option value="RS">RS</option>
-                        <option value="RO">RO</option>
-                        <option value="RR">RR</option>
-                        <option value="SC">SC</option>
-                        <option value="SP">SP</option>
-                        <option value="SE">SE</option>
-                        <option value="TO">TO</option>
-                    </select>
+                    <option value="">Selecione</option>
+                    <option value="AC">AC</option>
+                    <option value="AL">AL</option>
+                    <option value="AP">AP</option>
+                    <option value="AM">AM</option>
+                    <option value="BA">BA</option>
+                    <option value="CE">CE</option>
+                    <option value="DF">DF</option>
+                    <option value="ES">ES</option>
+                    <option value="GO">GO</option>
+                    <option value="MA">MA</option>
+                    <option value="MT">MT</option>
+                    <option value="MS">MS</option>
+                    <option value="MG">MG</option>
+                    <option value="PA">PA</option>
+                    <option value="PB">PB</option>
+                    <option value="PR">PR</option>
+                    <option value="PE">PE</option>
+                    <option value="PI">PI</option>
+                    <option value="RJ">RJ</option>
+                    <option value="RN">RN</option>
+                    <option value="RS">RS</option>
+                    <option value="RO">RO</option>
+                    <option value="RR">RR</option>
+                    <option value="SC">SC</option>
+                    <option value="SP">SP</option>
+                    <option value="SE">SE</option>
+                    <option value="TO">TO</option>
+                </select>
             </div>
 
             <!--Botões-->
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
-                <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
-                <button type="button" class="btn btn-danger" id="btnDelete" onclick="excluirCliente()">Delete</button>
+                <button type="submit" class="btn btn-warning" id="btnUpdate"  onclick="atualizarCliente()" disabled>Editar</button>
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="excluirCliente()" disabled>Delete</button>
                 <button type="reset" class="btn mt-3" id="btnReset" onclick="resetForm()"></button>
             </div>
+
         </form>
     </div>
 

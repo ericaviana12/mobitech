@@ -11,21 +11,18 @@ ipcRenderer.send('db-connect')
 
 // expor (autorizar a comunicação entre processos)
 contextBridge.exposeInMainWorld('api', {
-    clientWindow: () => ipcRenderer.send('client-window'),
-    osWindow: () => ipcRenderer.send('os-window'),
-    dbStatus: (message) => ipcRenderer.on('db-status', message),
-    newClient: (client) => ipcRenderer.send('new-client', client),
-    resetForm: (args) => ipcRenderer.on('reset-form', args),
-    searchName: (name) => ipcRenderer.send('search-name', name),
-    renderClient: (dataClient) => ipcRenderer.on('render-client', dataClient),
-    validateSearch: () => ipcRenderer.send('validate-search'),
-    setClient: (args) => ipcRenderer.on('set-client', args),
-    deleteClient: (id) => ipcRenderer.send('delete-client', id)
+  clientWindow: () => ipcRenderer.send('client-window'),
+  osWindow: () => ipcRenderer.send('os-window'),
+  dbStatus: (message) => ipcRenderer.on('db-status', message), // Trocar o ícone de banco de dados conectado ou desconectado
+  newClient: (client) => ipcRenderer.send('new-client', client),
+  resetForm: (args) => ipcRenderer.on('reset-form', args),
+  searchName: (name) => ipcRenderer.send('search-name', name),
+  renderClient: (dataClient) => ipcRenderer.on('render-client', dataClient),
+  validateSearch: () => ipcRenderer.send('validate-search'),
+  setName: (args) => ipcRenderer.on('set-name', args), // Trocar o nome do campo de busca e colocar no campo nome, caso não tenha esse cliente no cadastro
+  updateClientes: (cliente) => ipcRenderer.send('update-clientes', cliente),
+  deleteClient: (cpf) => ipcRenderer.send('delete-client', cpf)
 })
-
-function dbStatus(message) {
-    ipcRenderer.on('db-status', message)
-}
 
 // Tratamento de exceção CPF duplicado
 contextBridge.exposeInMainWorld('electron', {
