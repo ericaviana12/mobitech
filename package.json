@@ -1,0 +1,30 @@
+{
+  "name": "mobitech",
+  "version": "1.0.0",
+  "description": "Aplicação para cadastro de clientes e ordem de serviço para montagem de móveis.",
+  "main": "main.js",
+  "devDependencies": {
+    "electron": "^36.2.0"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericaviana12/mobitech.git"
+  },
+  "keywords": [
+    "mobitech"
+  ],
+  "author": "Erica Viana",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericaviana12/mobitech/issues"
+  },
+  "homepage": "https://github.com/ericaviana12/mobitech#readme",
+  "dependencies": {
+    "jspdf": "^3.0.1",
+    "mongoose": "^8.14.3"
+  }
+}
