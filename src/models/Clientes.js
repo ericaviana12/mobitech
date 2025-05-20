@@ -4,13 +4,13 @@
  */
 
 //Importação dos recursos do framework mongoose
-const {model, Schema} = require('mongoose')
+const { model, Schema } = require('mongoose')
 
 //Criação da estrutura da coleção Clientes
 const clienteSchema = new Schema({
     nomeCliente: {
         type: String
-    }, 
+    },
     cpfCliente: {
         type: String,
         unique: true,
@@ -43,7 +43,7 @@ const clienteSchema = new Schema({
     ufCliente: {
         type: String
     }
-}, {versionKey: false}) //Não versionar os dados armazenadas
+}, { versionKey: false }) //Não versionar os dados armazenadas
 
 //Exportar para o main o modelo de dados
 //Clientes será o nome da coleção

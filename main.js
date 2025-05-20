@@ -510,27 +510,27 @@ ipcMain.on('update-clientes', async (event, dadosAtualizados) => {
 //= CRUD Delete =============================================================
 
 ipcMain.on('delete-client', async (event, cpf) => {
-  try {
-    const resultado = await clientModel.deleteOne({ cpfCliente: cpf })
-    if (resultado.deletedCount > 0) {
-      dialog.showMessageBox({
-        type: 'info',
-        title: 'Exclusão concluída',
-        message: 'Cliente excluído com sucesso!'
-      })
-      // Limpar formulário após exclusão
-      event.reply('reset-form')
-    } else {
-      dialog.showMessageBox({
-        type: 'warning',
-        title: 'Erro',
-        message: 'Cliente não encontrado para exclusão.'
-      })
+    try {
+        const resultado = await clientModel.deleteOne({ cpfCliente: cpf })
+        if (resultado.deletedCount > 0) {
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Exclusão concluída',
+                message: 'Cliente excluído com sucesso!'
+            })
+            // Limpar formulário após exclusão
+            event.reply('reset-form')
+        } else {
+            dialog.showMessageBox({
+                type: 'warning',
+                title: 'Erro',
+                message: 'Cliente não encontrado para exclusão.'
+            })
+        }
+    } catch (erro) {
+        console.log(erro)
+        dialog.showErrorBox('Erro ao excluir cliente', erro.message)
     }
-  } catch (erro) {
-    console.log(erro)
-    dialog.showErrorBox('Erro ao excluir cliente', erro.message)
-  }
 })
 
 //= Fim - CRUD Delete =======================================================
@@ -543,12 +543,15 @@ ipcMain.on('delete-client', async (event, cpf) => {
 ipcMain.on('search-suggestions', async (event, termo) => {
     try {
         const regex = new RegExp(termo, 'i')
-        const sugestoes = await clientModel.find({
+        let sugestoes = await clientModel.find({
             $or: [
                 { nomeCliente: regex },
                 { cpfCliente: regex }
             ]
-        }).limit(5)
+        }).limit(10)
+
+        // Ordena em ordem alfabética pelo nomeCliente
+        sugestoes = sugestoes.sort((a, b) => a.nomeCliente.localeCompare(b.nomeCliente))
 
         event.reply('suggestions-found', JSON.stringify(sugestoes))
     } catch (error) {

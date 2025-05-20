@@ -40,7 +40,7 @@ body {
 }
 
 /* LOGO */
-#logo{
+#logo {
     position: fixed;
     bottom: 40px;
     right: 5px;
@@ -49,7 +49,7 @@ body {
 }
 
 /* ocultar o campo id do cliente (na página cliente do sistema) */
-#idClient{
+#idClient {
     display: none;
 }
 
@@ -59,8 +59,8 @@ footer {
     height: 45px;
     padding: 5px;
     background-color: var(--footer);
-    display: flex;   
-    justify-content: space-between;    
+    display: flex;
+    justify-content: space-between;
     position: fixed;
     bottom: 0;
 }
@@ -79,23 +79,23 @@ footer p {
 /** LISTA SUSPENSA **/
 
 .suggestion-list {
-  position: absolute;
-  background: white;
-  border: 1px solid #ccc;
-  list-style: none;
-  padding: 0;
-  margin-top: 0;
-  width: 100%;
-  max-height: 150px;
-  overflow-y: auto;
-  z-index: 100;
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    list-style: none;
+    padding: 0;
+    margin-top: 0;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 100;
 }
 
 .suggestion-list li {
-  padding: 8px;
-  cursor: pointer;
+    padding: 8px;
+    cursor: pointer;
 }
 
 .suggestion-list li:hover {
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }

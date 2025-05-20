@@ -22,7 +22,7 @@
             <div class="col-sm-6">
                 <input type="text" class="form-control" id="searchClient" maxlength="30" spellcheck="false"
                     placeholder="Digite o nome ou CPF" autocomplete="off">
-                    <ul id="suggestionList" class="suggestion-list"></ul>
+                <ul id="suggestionList" class="suggestion-list"></ul>
             </div>
             <div class="col-sm-6">
                 <button type="button" class="btn btn-dark" id="btnRead" onclick="buscarCliente()">Buscar</button>
@@ -138,8 +138,10 @@
             <!--Botões-->
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
-                <button type="submit" class="btn btn-warning" id="btnUpdate"  onclick="atualizarCliente()" disabled>Editar</button>
-                <button type="button" class="btn btn-danger" id="btnDelete" onclick="excluirCliente()" disabled>Delete</button>
+                <button type="submit" class="btn btn-warning" id="btnUpdate" onclick="atualizarCliente()"
+                    disabled>Editar</button>
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="excluirCliente()"
+                    disabled>Delete</button>
                 <button type="reset" class="btn mt-3" id="btnReset" onclick="resetForm()"></button>
             </div>
 
