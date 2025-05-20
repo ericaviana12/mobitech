@@ -354,6 +354,48 @@ function excluirCliente() {
 
 
 // ==========================================================================
+// === Lista suspensa =======================================================
+
+const searchInput = document.getElementById('searchClient')
+const suggestionList = document.getElementById('suggestionList')
+
+searchInput.addEventListener('input', () => {
+    const busca = searchInput.value.trim()
+    if (busca.length >= 1) {
+        api.buscarSugestoes(busca) // envia para o main
+    } else {
+        suggestionList.innerHTML = ""
+    }
+})
+
+api.retornarSugestoes((event, sugestoes) => {
+    suggestionList.innerHTML = ""
+    const lista = JSON.parse(sugestoes)
+
+    lista.forEach(cli => {
+        const li = document.createElement('li')
+        li.textContent = `${cli.nomeCliente} (${cli.cpfCliente})`
+        li.addEventListener('click', () => {
+            searchInput.value = cli.cpfCliente
+            suggestionList.innerHTML = ""
+            buscarCliente() // já chama o cliente direto
+        })
+        suggestionList.appendChild(li)
+    })
+})
+
+// Para fechar a lista ao clicar fora
+document.addEventListener('click', (e) => {
+    if (!suggestionList.contains(e.target) && e.target !== searchInput) {
+        suggestionList.innerHTML = ""
+    }
+})
+
+// === Fim -  Lista suspensa ================================================
+// ==========================================================================
+
+
+// ==========================================================================
 // Atalho para Enter acionar o botão correto (Adicionar ou Atualizar)
 
 /*

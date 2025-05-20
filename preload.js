@@ -21,7 +21,9 @@ contextBridge.exposeInMainWorld('api', {
   validateSearch: () => ipcRenderer.send('validate-search'),
   setName: (args) => ipcRenderer.on('set-name', args), // Trocar o nome do campo de busca e colocar no campo nome, caso não tenha esse cliente no cadastro
   updateClientes: (cliente) => ipcRenderer.send('update-clientes', cliente),
-  deleteClient: (cpf) => ipcRenderer.send('delete-client', cpf)
+  deleteClient: (cpf) => ipcRenderer.send('delete-client', cpf),
+  buscarSugestoes: (valor) => ipcRenderer.send('search-suggestions', valor),
+  retornarSugestoes: (callback) => ipcRenderer.on('suggestions-found', callback)
 })
 
 // Tratamento de exceção CPF duplicado

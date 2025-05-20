@@ -535,3 +535,26 @@ ipcMain.on('delete-client', async (event, cpf) => {
 
 //= Fim - CRUD Delete =======================================================
 //===========================================================================
+
+
+// ==========================================================================
+// === Lista suspensa =======================================================
+
+ipcMain.on('search-suggestions', async (event, termo) => {
+    try {
+        const regex = new RegExp(termo, 'i')
+        const sugestoes = await clientModel.find({
+            $or: [
+                { nomeCliente: regex },
+                { cpfCliente: regex }
+            ]
+        }).limit(5)
+
+        event.reply('suggestions-found', JSON.stringify(sugestoes))
+    } catch (error) {
+        console.error("Erro ao buscar sugestões:", error)
+    }
+})
+
+// === Fim -  Lista suspensa ================================================
+// ==========================================================================

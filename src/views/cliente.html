@@ -21,7 +21,8 @@
             <!--Buscar cliente-->
             <div class="col-sm-6">
                 <input type="text" class="form-control" id="searchClient" maxlength="30" spellcheck="false"
-                    placeholder="Digite o nome ou CPF">
+                    placeholder="Digite o nome ou CPF" autocomplete="off">
+                    <ul id="suggestionList" class="suggestion-list"></ul>
             </div>
             <div class="col-sm-6">
                 <button type="button" class="btn btn-dark" id="btnRead" onclick="buscarCliente()">Buscar</button>
