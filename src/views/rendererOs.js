@@ -12,7 +12,11 @@ let arrayClients = []
 
 inputSearchClientOs.addEventListener('input', () => {
     const search = inputSearchClientOs.value.toLowerCase()
-    suggestionList.innerHTML = ""
+    // Oculta a lista se o campo estiver vazio
+    if (search === '') {
+        suggestionList.innerHTML = ""
+        return
+    }
 
     // Solicitar a busca dos clientes no main
     window.api.searchClients()
