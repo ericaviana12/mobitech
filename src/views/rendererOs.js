@@ -1,88 +1,59 @@
 // ===========================================================
 // == Busca avançada =========================================
 
-const input = document.getElementById('inputSearchClient')
+// Pegar elementos do DOM
+const inputSearchClientOs = document.getElementById('inputSearchClientOs')
 const suggestionList = document.getElementById('viewListSuggestion')
-let idClient = document.getElementById('inputIdClient')
-let nameClient = document.getElementById('inputNameClient')
-let phoneClient = document.getElementById('inputPhoneClient')
+const inputIdClient = document.getElementById('inputIdClient')
+const inputNameClient = document.getElementById('inputNameClient')
+const inputPhoneClient = document.getElementById('inputPhoneClient')
 
 let arrayClients = []
 
-input.addEventListener('input', () => {
-    const search = input.value.toLowerCase() //captura o que foi digitado e converte tudo para minúsculo
+inputSearchClientOs.addEventListener('input', () => {
+    const search = inputSearchClientOs.value.toLowerCase()
     suggestionList.innerHTML = ""
 
-    // Buscar os nomes dos clientes no banco
-    api.searchClients()
+    // Solicitar a busca dos clientes no main
+    window.api.searchClients()
 
-    // Listar os clientes 
-    api.listClients((event, clients) => {
-        const listaClientes = JSON.parse(clients)
-        arrayClients = listaClientes
+    // Ouvir a resposta da lista de clientes
+    window.api.listClients((event, clientsJson) => {
+        const clients = JSON.parse(clientsJson)
+        arrayClients = clients
 
-        //Filtra os clientes cujo nome (c.nomeCliente) contém o texto digitado(search)
+        // Filtrar clientes pelo nome que contém o texto digitado
         const results = arrayClients.filter(c =>
             c.nomeCliente && c.nomeCliente.toLowerCase().includes(search)
-        ).slice(0, 10) // máximo 10 nomes
+        ).slice(0, 10)
 
-        suggestionList.innerHTML = "" // limpa novamente após possível atraso
+        suggestionList.innerHTML = ""
 
-        // Para cada resultado, cria um item da lista
         results.forEach(c => {
             const item = document.createElement('li')
             item.classList.add('list-group-item', 'list-group-item-action')
             item.textContent = c.nomeCliente
 
-            // Adiciona evento de clique no ítem da lista para preencher os campos do form
+            // Quando clicar no nome do cliente, preencher o formulário da OS
             item.addEventListener('click', () => {
-                idClient.value = c._id
-                nameClient.value = c.nomeCliente
-                phoneClient.value = c.foneCliente
-                input.value = ""
+                inputIdClient.value = c._id
+                inputNameClient.value = c.nomeCliente
+                inputPhoneClient.value = c.foneCliente
+                inputSearchClientOs.value = ""
                 suggestionList.innerHTML = ""
             })
 
-            // adiciona os nomes(itens <li>) a lista <ul>
             suggestionList.appendChild(item)
         })
     })
 })
 
-// setar o foco no campo de busca (validação de busca do cliente obrigatória)
-api.setSearch((args) => {
-    input.focus()
-})
-
-// Ocultar lista ao clicar fora
+// Ocultar a lista ao clicar fora do campo ou da lista
 document.addEventListener('click', (e) => {
-    if (!input.contains(e.target) && !suggestionList.contains(e.target)) {
+    if (!inputSearchClientOs.contains(e.target) && !suggestionList.contains(e.target)) {
         suggestionList.innerHTML = ""
     }
 })
 
 // == Fim - busca avançada =====================================
 // =============================================================
-
-// Iniciar a janela OS alterando as propriedades de alguns elementos
-document.addEventListener('DOMContentLoaded', () => {
-    // Desativar os botões
-    btnUpdate.disabled = true
-    btnDelete.disabled = true    
-})
-
-// criar um vetor para manipulação dos dados da OS
-let arrayOS = []
-
-// captura dos IDs do form OS
-let frmOS = document.getElementById('frmOS')
-let statusOS = document.getElementById('inputStatus')
-let movel = document.getElementById('inputMovel')
-let marca = document.getElementById('inputMarca')
-let volumes = document.getElementById('inputVolumes')
-let ambiente = document.getElementById('inputAmbiente')
-let problemas = document.getElementById('inputProblemas')
-let material = document.getElementById('inputMaterial')
-let montador = document.getElementById('inputMontador')
-let observacoes = document.getElementById('inputObservacoes')
-let valor = document.getElementById('inputValor')

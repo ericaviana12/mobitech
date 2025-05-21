@@ -95,7 +95,12 @@ function osWindow() {
             autoHideMenuBar: true,
             resizable: false,
             parent: main,
-            modal: true
+            modal: true,
+
+            //Ativação do preload.js
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js')
+            }
         })
     }
     os.loadFile('./src/views/os.html')
@@ -591,7 +596,8 @@ ipcMain.on('search-clients', async (event) => {
         const clients = await clientModel.find().sort({ nomeCliente: 1 })
         event.reply('list-clients', JSON.stringify(clients))
     } catch (error) {
-        console.error(error)
+        console.error('Erro ao buscar clientes:', error)
+        event.reply('list-clients', JSON.stringify([]))
     }
 })
 
