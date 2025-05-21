@@ -103,3 +103,10 @@ footer p {
 #btnBuscaOS {
     margin-left: 370px;
 }
+
+/* Botões na tela OS */
+.os-button {
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
