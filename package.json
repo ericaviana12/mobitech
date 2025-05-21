@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/ericaviana12/mobitech#readme",
   "dependencies": {
+    "electron-prompt": "^1.7.0",
     "jspdf": "^3.0.1",
     "mongoose": "^8.14.3"
   }

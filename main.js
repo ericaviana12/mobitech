@@ -22,6 +22,9 @@ const { jspdf, default: jsPDF } = require('jspdf')
 //importação de biblioteca fs (nativa do js) para manipulação de dados
 const fs = require('fs')
 
+// importação do pacote electron-prompt (dialog de input) - npm i electron-prompt
+const prompt = require('electron-prompt')
+
 //Janela principal
 let win
 const createWindow = () => {
@@ -544,6 +547,32 @@ ipcMain.on('delete-client', async (event, cpf) => {
 //===========================================================================
 
 
+// ==========================================================================
+// === Lista suspensa =======================================================
+
+ipcMain.on('search-suggestions', async (event, termo) => {
+    try {
+        const regex = new RegExp(termo, 'i')
+        let sugestoes = await clientModel.find({
+            $or: [
+                { nomeCliente: regex },
+                { cpfCliente: regex }
+            ]
+        }).limit(5)
+
+        // Ordena em ordem alfabética pelo nomeCliente
+        sugestoes = sugestoes.sort((a, b) => a.nomeCliente.localeCompare(b.nomeCliente))
+
+        event.reply('suggestions-found', JSON.stringify(sugestoes))
+    } catch (error) {
+        console.error("Erro ao buscar sugestões:", error)
+    }
+})
+
+// === Fim -  Lista suspensa ================================================
+// ==========================================================================
+
+
 // ===================================================================================================
 // === FIM - CLIENTES ================================================================================
 // ===================================================================================================
@@ -560,155 +589,11 @@ ipcMain.on('delete-client', async (event, cpf) => {
 ipcMain.on('search-clients', async (event) => {
     try {
         const clients = await clientModel.find().sort({ nomeCliente: 1 })
-        //console.log(clients)
         event.reply('list-clients', JSON.stringify(clients))
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 })
 
 // == Fim - Buscar cliente para vincular na OS ================
-// ============================================================
-
-
-// ============================================================
-// == CRUD Create - Gerar OS ==================================
-
-// Validação de busca (preenchimento obrigatório Id Cliente-OS)
-ipcMain.on('validate-client', (event) => {
-    dialog.showMessageBox({
-        type: 'warning',
-        title: "Aviso!",
-        message: "É obrigatório vincular o cliente na Ordem de Serviço",
-        buttons: ['OK']
-    }).then((result) => {
-        //ação ao pressionar o botão (result = 0)
-        if (result.response === 0) {
-            event.reply('set-search')
-        }
-    })
-})
-
-ipcMain.on('new-os', async (event, os) => {
-    //importante! teste de recebimento dos dados da os (passo 2)
-    console.log(os)
-    // Cadastrar a estrutura de dados no banco de dados MongoDB
-    try {
-        // criar uma nova de estrutura de dados usando a classe modelo. Atenção! Os atributos precisam ser idênticos ao modelo de dados OS.js e os valores são definidos pelo conteúdo do objeto os
-        const newOS = new osModel({
-            idCliente: os.idCliente_OS,
-            statusOS: os.status_OS,
-            movel: os.movel_OS,
-            marca: os.marca_OS,
-            volumes: os.volumes_OS,
-            ambiente: os.ambiente_OS,
-            problemas: os.problemas_OS,
-            material: os.material_OS,
-            montador: os.montador_OS,
-            observacoes: os.observacoes_OS,
-            valor: os.valor_OS
-        })
-        // salvar os dados da OS no banco de dados
-        await newOS.save()
-        // Mensagem de confirmação
-        dialog.showMessageBox({
-            //customização
-            type: 'info',
-            title: "Aviso",
-            message: "OS gerada com sucesso",
-            buttons: ['OK']
-        }).then((result) => {
-            //ação ao pressionar o botão (result = 0)
-            if (result.response === 0) {
-                //enviar um pedido para o renderizador limpar os campos e resetar as configurações pré definidas (rótulo 'reset-form' do preload.js
-                event.reply('reset-form')
-            }
-        })
-    } catch (error) {
-        console.log(error)
-    }
-})
-
-// == Fim - CRUD Create - Gerar OS ===========================
-// ============================================================
-
-
-// ============================================================
-// == Buscar OS - CRUD Read ===================================
-
-ipcMain.on('search-os', async (event) => {
-    prompt({
-        title: 'Buscar OS',
-        label: 'Digite o número da OS:',
-        inputAttrs: {
-            type: 'text'
-        },
-        type: 'input',
-        width: 400,
-        height: 200
-    }).then(async (result) => {
-        // buscar OS pelo id (verificar formato usando o mongoose - importar no início do main)
-        if (result !== null) {
-            // Verificar se o ID é válido (uso do mongoose - não esquecer de importar)
-            if (mongoose.Types.ObjectId.isValid(result)) {
-                try {
-                    const dataOS = await osModel.findById(result)
-                    if (dataOS) {
-                        console.log(dataOS) // teste importante
-                        // enviando os dados da OS ao rendererOS
-                        // OBS: IPC só trabalha com string, então é necessário converter o JSON para string JSON.stringify(dataOS)
-                        event.reply('render-os', JSON.stringify(dataOS))
-                    } else {
-                        dialog.showMessageBox({
-                            type: 'warning',
-                            title: "Aviso!",
-                            message: "OS não encontrada",
-                            buttons: ['OK']
-                        })
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
-            } else {
-                dialog.showMessageBox({
-                    type: 'error',
-                    title: "Atenção!",
-                    message: "Formato do número da OS inválido.\nVerifique e tente novamente.",
-                    buttons: ['OK']
-                })
-            }
-        }
-    })
-})
-
-// == Fim - Buscar OS - CRUD Read =============================
-// ============================================================
-
-
-// ============================================================
-// == Excluir OS - CRUD Delete  ===============================
-
-ipcMain.on('delete-os', async (event, idOS) => {
-    console.log(idOS) // teste do passo 2 (recebimento do id)
-    try {
-        //importante - confirmar a exclusão
-        //osScreen é o nome da variável que representa a janela OS
-        const { response } = await dialog.showMessageBox(osScreen, {
-            type: 'warning',
-            title: "Atenção!",
-            message: "Deseja excluir esta ordem de serviço?\nEsta ação não poderá ser desfeita.",
-            buttons: ['Cancelar', 'Excluir'] //[0, 1]
-        })
-        if (response === 1) {
-            //console.log("teste do if de excluir")
-            //Passo 3 - Excluir a OS
-            const delOS = await osModel.findByIdAndDelete(idOS)
-            event.reply('reset-form')
-        }
-    } catch (error) {
-        console.log(error)
-    }
-})
-
-// == Fim Excluir OS - CRUD Delete ============================
 // ============================================================

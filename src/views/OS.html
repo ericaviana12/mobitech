@@ -23,15 +23,14 @@
 
             <div class="mb-2 row"> <!-- Cria uma linha -->
                 <div class="col-sm-4">
-                    <label for="inputSearchClient" class="form-label">Buscar cliente:</label>
+                    <label for="inputSearchClientOs" class="form-label">Buscar cliente:</label>
                     <div class="input-group">
-                        <input type="text" id="searchClientOs" class="form-control" id="inputSearchClient"
+                        <input type="text" id="inputSearchClientOs" class="form-control"
                             placeholder="Digite o nome ou CPF para buscar..." aria-label="Pesquisar Usuário"
                             list="clientesLista">
                         <datalist id="clientesLista"></datalist>
-                        <button class="btn btn-outline-primary" type="button" onclick="buscarNome()">Buscar</button>
+                        <button class="btn btn-outline-primary" type="button" id="btnSearchClient">Buscar</button>
                     </div>
-                    <!-- Lista de sugestões usando classes bootstrap -->
                     <ul id="viewListSuggestion" class="list-group position-absolute w-100"></ul>
                 </div>
 
