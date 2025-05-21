@@ -81,11 +81,10 @@ footer p {
 .suggestion-list {
     position: absolute;
     background: white;
-    border: 1px solid #ccc;
     list-style: none;
     padding: 0;
     margin-top: 0;
-    width: 100%;
+    max-width: 100%;
     max-height: 150px;
     overflow-y: auto;
     z-index: 100;
@@ -98,4 +97,9 @@ footer p {
 
 .suggestion-list li:hover {
     background-color: #f0f0f0;
+}
+
+/* Botão Buscar OS */
+#btnBuscaOS {
+    margin-left: 370px;
 }

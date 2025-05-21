@@ -23,7 +23,17 @@ contextBridge.exposeInMainWorld('api', {
   updateClientes: (cliente) => ipcRenderer.send('update-clientes', cliente),
   deleteClient: (cpf) => ipcRenderer.send('delete-client', cpf),
   buscarSugestoes: (valor) => ipcRenderer.send('search-suggestions', valor),
-  retornarSugestoes: (callback) => ipcRenderer.on('suggestions-found', callback)
+  retornarSugestoes: (callback) => ipcRenderer.on('suggestions-found', callback),
+
+  searchClients: () => ipcRenderer.send('search-clients'),
+  listClients: (clients) => ipcRenderer.on('list-clients', clients),
+  searchOS: () => ipcRenderer.send('search-os'),
+  validateClient: () => ipcRenderer.send('validate-client'),
+  setSearch: (args) => ipcRenderer.on('set-search', args),
+  newOS: (os) => ipcRenderer.send('new-os', os),
+  renderOS: (dataOS) => ipcRenderer.on('render-os', dataOS),
+  deleteOS: (idOS) => ipcRenderer.send('delete-os', idOS)
+
 })
 
 // Tratamento de exceção CPF duplicado
