@@ -563,7 +563,7 @@ ipcMain.on('search-suggestions', async (event, termo) => {
                 { nomeCliente: regex },
                 { cpfCliente: regex }
             ]
-        }).limit(5)
+        }).limit(10)
 
         // Ordena em ordem alfabética pelo nomeCliente
         sugestoes = sugestoes.sort((a, b) => a.nomeCliente.localeCompare(b.nomeCliente))
