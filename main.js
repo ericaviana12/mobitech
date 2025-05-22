@@ -603,3 +603,54 @@ ipcMain.on('search-clients', async (event) => {
 
 // == Fim - Buscar cliente para vincular na OS ================
 // ============================================================
+
+
+// ============================================================
+// CRUD Create ================================================
+
+ipcMain.on('new-os', async (event, os) => {
+    try {
+        // Criar nova OS (modelo osModel, igual você fez com clientModel)
+        const newOs = new osModel({
+            idCliente: os.idCliente,
+            nomeCliente: os.nomeCliente,
+            telefoneCliente: os.telefoneCliente,
+            statusOs: os.statusOs,
+            tipoMovel: os.tipoMovel,
+            marcaMovel: os.marcaMovel,
+            numVolumes: os.numVolumes,
+            ambienteMontagem: os.ambienteMontagem,
+            problemasRelatados: os.problemasRelatados,
+            materialNecessario: os.materialNecessario,
+            montadorResponsavel: os.montadorResponsavel,
+            observacoes: os.observacoes,
+            valor: os.valor,
+            dataEntrada: os.dataEntrada,
+        })
+
+        await newOs.save()
+
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Sucesso',
+            message: 'Ordem de Serviço criada com sucesso!',
+            buttons: ['OK']
+        }).then(result => {
+            if(result.response === 0) {
+                event.reply('reset-os-form')
+            }
+        })
+
+    } catch (error) {
+        console.error("Erro ao salvar OS:", error)
+        dialog.showMessageBox({
+            type: 'error',
+            title: 'Erro',
+            message: 'Erro ao criar a OS, tente novamente.',
+            buttons: ['OK']
+        })
+    }
+})
+
+// FIM - CRUD Create ==========================================
+// ============================================================

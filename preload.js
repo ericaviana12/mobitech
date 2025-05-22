@@ -24,9 +24,11 @@ contextBridge.exposeInMainWorld('api', {
   deleteClient: (cpf) => ipcRenderer.send('delete-client', cpf),
   buscarSugestoes: (valor) => ipcRenderer.send('search-suggestions', valor),
   retornarSugestoes: (callback) => ipcRenderer.on('suggestions-found', callback),
-
   searchClients: () => ipcRenderer.send('search-clients'),
-  listClients: (callback) => ipcRenderer.on('list-clients', callback)
+  listClients: (callback) => ipcRenderer.on('list-clients', callback),
+
+  newOS: (os) => ipcRenderer.send('new-os', os),
+  onResetOSForm: (callback) => ipcRenderer.on('reset-os-form', callback)
 
 })
 

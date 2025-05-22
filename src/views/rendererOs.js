@@ -61,3 +61,63 @@ document.addEventListener('click', (e) => {
 
 // == Fim - busca avançada =====================================
 // =============================================================
+
+
+// ============================================================
+// CRUD Create ================================================
+
+const osStatus = document.getElementById('osStatus')
+const inputMovel = document.getElementById('inputMovel')
+const inputMarca = document.getElementById('inputMarca')
+const inputVolumes = document.getElementById('inputVolumes')
+const inputAmbiente = document.getElementById('inputAmbiente')
+const inputProblemas = document.getElementById('inputProblemas')
+const inputMaterial = document.getElementById('inputMaterial')
+const inputMontador = document.getElementById('inputMontador')
+const inputObservacoes = document.getElementById('inputObservacoes')
+const inputValor = document.getElementById('inputValor')
+
+frmOS.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    if (!inputIdClient.value) {
+        // Se não selecionou cliente, mostrar alerta e não criar OS
+        alert("É obrigatório vincular um cliente na Ordem de Serviço")
+        return
+    }
+
+    // Construir objeto OS para enviar ao main
+    const os = {
+        idCliente: inputIdClient.value,
+        nomeCliente: inputNameClient.value,
+        telefoneCliente: inputPhoneClient.value,
+        statusOs: osStatus.value,
+        tipoMovel: inputMovel.value,
+        marcaMovel: inputMarca.value,
+        numVolumes: inputVolumes.value,
+        ambienteMontagem: inputAmbiente.value,
+        problemasRelatados: inputProblemas.value,
+        materialNecessario: inputMaterial.value,
+        montadorResponsavel: inputMontador.value,
+        observacoes: inputObservacoes.value,
+        valor: parseFloat(inputValor.value) || 0,
+        dataEntrada: new Date().toISOString(), // pode usar data atual
+    }
+
+    console.log("Objeto OS para criação:", os)
+
+    // Enviar para o main via preload (usar canal new-os, por exemplo)
+    window.api.newOS(os)
+})
+
+window.api.onResetOSForm(() => {
+    frmOS.reset()
+    inputIdClient.value = ""
+    inputNameClient.value = ""
+    inputPhoneClient.value = ""
+    txtOs.value = "" // se quiser limpar
+    inputData.value = "" // se quiser limpar
+})
+
+// FIM - CRUD Create ==========================================
+// ============================================================
