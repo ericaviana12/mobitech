@@ -82,26 +82,23 @@ frmOS.addEventListener('submit', async (event) => {
 
     if (!inputIdClient.value) {
         // Se não selecionou cliente, mostrar alerta e não criar OS
-        alert("É obrigatório vincular um cliente na Ordem de Serviço")
+        alert("É obrigatório vincular um cliente na ordem de serviço")
         return
     }
 
     // Construir objeto OS para enviar ao main
     const os = {
         idCliente: inputIdClient.value,
-        nomeCliente: inputNameClient.value,
-        telefoneCliente: inputPhoneClient.value,
-        statusOs: osStatus.value,
-        tipoMovel: inputMovel.value,
-        marcaMovel: inputMarca.value,
-        numVolumes: inputVolumes.value,
-        ambienteMontagem: inputAmbiente.value,
-        problemasRelatados: inputProblemas.value,
-        materialNecessario: inputMaterial.value,
-        montadorResponsavel: inputMontador.value,
+        statusOS: osStatus.value,
+        movel: inputMovel.value,
+        marca: inputMarca.value,
+        volumes: inputVolumes.value,
+        ambiente: inputAmbiente.value,
+        problemas: inputProblemas.value,
+        material: inputMaterial.value,
+        montador: inputMontador.value,
         observacoes: inputObservacoes.value,
-        valor: parseFloat(inputValor.value) || 0,
-        dataEntrada: new Date().toISOString(), // pode usar data atual
+        valor: inputValor.value,
     }
 
     console.log("Objeto OS para criação:", os)
