@@ -244,3 +244,117 @@ function removeOS() {
 
 // == Fim - CRUD Delete =======================================
 // ============================================================
+
+
+// ============================================================
+// == Imprimir OS =============================================
+
+const btnPrintOS = document.getElementById('btnPrintOS')
+
+btnPrintOS.addEventListener('click', () => {
+    if (!idOS.value) {
+        alert("Nenhuma OS carregada para imprimir!")
+        return
+    }
+    imprimirOS()
+})
+
+function imprimirOS() {
+    // Monta o conteúdo para impressão
+    const conteudo = `
+        <html>
+        <head>
+            <title>Ordem de Serviço - ${idOS.value}</title>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    margin: 40px;
+                    color: #333;
+                }
+
+                h1 {
+                    text-align: center;
+                    font-size: 28px;
+                    margin-bottom: 20px;
+                    color: #005B8F;
+                }
+
+                .os-container {
+                    border: 2px solid #005B8F;
+                    padding: 20px;
+                    border-radius: 8px;
+                }
+
+                .section {
+                    margin-bottom: 25px;
+                    padding-bottom: 10px;
+                    border-bottom: 1px dashed #aaa;
+                }
+
+                .section:last-child {
+                    border-bottom: none;
+                }
+
+                .label {
+                    font-weight: 600;
+                    color: #333;
+                    display: inline-block;
+                    width: 180px;
+                }
+
+                .value {
+                    color: #444;
+                }
+
+                .signature {
+                    text-align: center;
+                    margin-top: 50px;
+                    font-size: 16px;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Ordem de serviço - MobiTech</h1>
+            <div class="section">
+                <div><span class="field-label">Número OS:</span> ${idOS.value}</div>
+                <div><span class="field-label">Data:</span> ${dateOS.value}</div>
+                <div><span class="field-label">Cliente ID:</span> ${idClient.value}</div>
+                <div><span class="field-label">Status:</span> ${statusOS.value}</div>
+            </div>
+
+            <div class="section">
+                <div><span class="field-label">Móvel:</span> ${furniture.value}</div>
+                <div><span class="field-label">Modelo:</span> ${model.value}</div>
+                <div><span class="field-label">Volumes:</span> ${volumes.value}</div>
+                <div><span class="field-label">Ambiente:</span> ${environment.value}</div>
+            </div>
+
+            <div class="section">
+                <div><span class="field-label">Problema:</span> ${problem.value}</div>
+                <div><span class="field-label">Material:</span> ${material.value}</div>
+                <div><span class="field-label">Montador:</span> ${specialist.value}</div>
+                <div><span class="field-label">Observação:</span> ${obs.value}</div>
+            </div>
+
+            <div class="section">
+                <div><span class="field-label">Total:</span> R$ ${total.value}</div>
+            </div>
+
+            <div style="text-align:center; margin-top: 50px;">
+                <p>Assinatura do Cliente: ___________________________</p>
+            </div>
+        </body>
+        </html>
+    `
+
+    // Abrir nova janela para impressão
+    let janelaPrint = window.open('', '', 'width=800,height=600')
+    janelaPrint.document.write(conteudo)
+    janelaPrint.document.close()
+    janelaPrint.focus()
+    janelaPrint.print()
+    janelaPrint.close()
+}
+
+// == Fim - Imprimir OS =======================================
+// ============================================================

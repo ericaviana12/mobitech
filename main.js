@@ -16,7 +16,7 @@ const { conectar, desconectar } = require("./database.js")
 const clientModel = require("./src/models/Clientes.js")
 
 // Importação do Schema OS da camada model
-const osModel = require('./src/models/OS.js')
+const osModel = require('./src/models/Os.js')
 
 //Importação do pacote jspdf (npm i jspdf)
 const { jspdf, default: jsPDF } = require('jspdf')
@@ -209,10 +209,28 @@ const template = [
                 click: () => relatorioClientes()
             },
             {
-                label: 'OS aberta'
+                label: 'OS abertas',
+                click: () => relatorioOSporStatus('Aberta', 'Abertas', 'os_abertas')
             },
             {
-                label: 'OS concluídas'
+                label: 'OS em andamento',
+                click: () => relatorioOSporStatus('Em andamento', 'Em Andamento', 'os_em_andamento')
+            },
+            {
+                label: 'OS aguardando material',
+                click: () => relatorioOSporStatus('Aguardando material', 'Aguardando Material', 'os_aguardando_material')
+            },
+            {
+                label: 'OS concluídas',
+                click: () => relatorioOSporStatus('Concluída', 'Concluídas', 'os_concluidas')
+            },
+            {
+                label: 'OS canceladas',
+                click: () => relatorioOSporStatus('Cancelada', 'Canceladas', 'os_canceladas')
+            },
+            {
+                label: 'Todas as OS',
+                click: () => relatorioTodasOS()
             }
         ]
     },
@@ -792,4 +810,165 @@ ipcMain.on('delete-os', async (event, idOS) => {
 })
 
 // == OS - Fim - CRUD Delete ==================================
+// ============================================================
+
+
+// ============================================================
+// == Relatórios de Os - Por status ===========================
+
+async function relatorioOSporStatus(statusDesejado, tituloRelatorio, nomeArquivo) {
+    try {
+        const osFiltradas = await osModel.find({ statusOS: statusDesejado }).sort({ dataEntrada: -1 })
+
+        const doc = new jsPDF('p', 'mm', 'a4')
+        const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.png')
+        const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
+        doc.addImage(imageBase64, 'PNG', 5, 8)
+
+        doc.setFontSize(26)
+        doc.text(`Relatório de OS - ${tituloRelatorio}`, 14, 45)
+
+        const dataAtual = new Date().toLocaleDateString('pt-br')
+        doc.setFontSize(12)
+        doc.text(`Data: ${dataAtual}`, 160, 10)
+
+        let y = 60
+        doc.setFontSize(12)
+
+        // Cabeçalho
+        doc.text("Nº OS", 14, y)
+        doc.text("Móvel", 70, y)
+        doc.text("Problema", 120, y)
+        doc.text("Valor", 170, y)
+        y += 5
+        doc.setLineWidth(0.5)
+        doc.line(10, y, 200, y)
+        y += 10
+
+        // Função para formatar o valor em R$
+        const formatarValor = (valorStr) => {
+            const numero = Number(valorStr.replace(/\./g, '').replace(',', '.')) || 0
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numero)
+        }
+
+        osFiltradas.forEach((o) => {
+            if (y > 280) {
+                doc.addPage()
+                y = 20
+                doc.text("Nº OS", 14, y)
+                doc.text("Móvel", 70, y)
+                doc.text("Problema", 120, y)
+                doc.text("Valor", 170, y)
+                y += 5
+                doc.setLineWidth(0.5)
+                doc.line(10, y, 200, y)
+                y += 10
+            }
+
+            doc.text(String(o._id || ''), 14, y)
+            doc.text(String(o.movel || ''), 70, y)
+            doc.text(String(o.problema || ''), 120, y)
+            doc.text(formatarValor(o.valor || '0'), 170, y)
+            y += 10
+        })
+
+        const paginas = doc.internal.getNumberOfPages()
+        for (let i = 1; i <= paginas; i++) {
+            doc.setPage(i)
+            doc.setFontSize(10)
+            doc.text(`Página ${i} de ${paginas}`, 105, 200, { align: 'center' })
+        }
+
+        const tempDir = app.getPath('temp')
+        const filePath = path.join(tempDir, `${nomeArquivo}.pdf`)
+        doc.save(filePath)
+        shell.openPath(filePath)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// == Fim - Relatórios de Os - Por status =====================
+// ============================================================
+
+
+// ============================================================
+// == Relatórios de Os - Todas as Os ==========================
+
+async function relatorioTodasOS() {
+    try {
+        const osList = await osModel.find().sort({ dataEntrada: -1 })
+
+        const doc = new jsPDF('l', 'mm', 'a4') // landscape
+        const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.png')
+        const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
+        doc.addImage(imageBase64, 'PNG', 5, 8)
+
+        doc.setFontSize(22)
+        doc.text(`Relatório Geral de Ordens de Serviço`, 14, 45)
+
+        const dataAtual = new Date().toLocaleDateString('pt-br')
+        doc.setFontSize(12)
+        doc.text(`Data: ${dataAtual}`, 240, 10)
+
+        let y = 60
+        doc.setFontSize(11)
+
+        // Cabeçalho
+        doc.text("Nº OS", 10, y)
+        doc.text("Móvel", 70, y)
+        doc.text("Problema", 130, y)
+        doc.text("Status", 230, y)
+        doc.text("Valor", 270, y)
+        y += 5
+        doc.setLineWidth(0.5)
+        doc.line(10, y, 285, y)
+        y += 10
+
+        // Mesma função para formatar valor
+        const formatarValor = (valorStr) => {
+            const numero = Number(valorStr.replace(/\./g, '').replace(',', '.')) || 0
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numero)
+        }
+
+        osList.forEach((o) => {
+            if (y > 190) {
+                doc.addPage()
+                y = 20
+                doc.text("Nº OS", 10, y)
+                doc.text("Móvel", 70, y)
+                doc.text("Problema", 130, y)
+                doc.text("Status", 230, y)
+                doc.text("Valor", 270, y)
+                y += 5
+                doc.setLineWidth(0.5)
+                doc.line(10, y, 285, y)
+                y += 10
+            }
+
+            doc.text(String(o._id || ''), 10, y)
+            doc.text(String(o.movel || ''), 70, y)
+            doc.text(String(o.problema || ''), 130, y)
+            doc.text(String(o.statusOS || ''), 230, y)
+            doc.text(formatarValor(o.valor || '0'), 270, y)
+            y += 10
+        })
+
+        const paginas = doc.internal.getNumberOfPages()
+        for (let i = 1; i <= paginas; i++) {
+            doc.setPage(i)
+            doc.setFontSize(10)
+            doc.text(`Página ${i} de ${paginas}`, 150, 200, { align: 'center' })
+        }
+
+        const tempDir = app.getPath('temp')
+        const filePath = path.join(tempDir, `os_todas.pdf`)
+        doc.save(filePath)
+        shell.openPath(filePath)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// == Fim - Relatórios de Os - Todas as Os ====================
 // ============================================================
