@@ -4,13 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Impedir a execução de scripts externos -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
-    <!-- Título da janela -->
     <title>Mobi Tech</title>
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-    <!-- CSS Personalizado ATENÇÃO!!! sempre após o CSS do bootstrap -->
     <link rel="stylesheet" href="../public/css/style.css">
 </head>
 
@@ -18,7 +14,6 @@
     <div class="container">
         <form id="frmClient" class="mt-2 row g-3">
 
-            <!--Buscar cliente-->
             <div class="col-sm-6">
                 <input type="text" class="form-control" id="searchClient" maxlength="30" spellcheck="false"
                     placeholder="Digite o nome ou CPF" autocomplete="off">
@@ -28,74 +23,62 @@
                 <button type="button" class="btn btn-dark" id="btnRead" onclick="buscarCliente()">Buscar</button>
             </div>
 
-            <!--Linha-->
             <hr class="mt-4 border border-primary border -1">
 
-            <!--Id do cliente (oculto)-->
             <input type="text" id="idClient">
 
-            <!--Nome do cliente-->
             <div class="col-md-8">
                 <label for="inputNameClient" class="form-label">Nome completo</label>
                 <input type="text" class="form-control" id="inputNameClient" spellcheck="false" maxlength="30" required>
             </div>
 
-            <!--CPF do cliente-->
             <div class="col-md-4">
                 <label for="inputCPFClient" class="form-label">CPF</label>
                 <input type="text" class="form-control" id="inputCPFClient" spellcheck="false"
                     oninput="validarCPF(this)" maxlength="14" required>
             </div>
 
-            <!--Email-->
             <div class="col-md-6">
                 <label for="inputEmailClient" class="form-label">E-mail</label>
                 <input type="email" class="form-control" id="inputEmailNameClient" spellcheck="false" maxlength="30"
                     required>
             </div>
 
-            <!--Telefone-->
             <div class="col-md-4">
                 <label for="inputIPhoneClient" class="form-label">Telefone</label>
                 <input type="tel" class="form-control" id="inputIPhoneClient" spellcheck="false" maxlength="15" required
                     oninput="mascaraTelefone(this)">
             </div>
 
-            <!--CEP-->
             <div class="col-md-2">
                 <label for="inputCEPClient" class="form-label">CEP</label>
                 <input type="text" class="form-control" id="inputCEPClient" spellcheck="false" maxlength="9" required
                     onblur="buscarCEP()">
             </div>
 
-            <!--Logradouro-->
             <div class="col-md-6">
                 <label for="inputAddressClient" class="form-label">Logradouro</label>
                 <input type="text" class="form-control" id="inputAddressClient" spellcheck="false" maxlength="30"
                     required>
             </div>
 
-            <!--Numero-->
             <div class="col-md-3">
                 <label for="inputNumberClient" class="form-label">Numero</label>
                 <input type="number" class="form-control" id="inputNumberClient" spellcheck="false" maxlength="5"
                     required>
             </div>
 
-            <!--Complemento-->
             <div class="col-md-3">
                 <label for="inputComplementClient" class="form-label">Complemento</label>
                 <input type="text" class="form-control" id="inputComplementClient" spellcheck="false" maxlength="12">
             </div>
 
-            <!--Bairro-->
             <div class="col-md-5">
                 <label for="inputNeighborhoodClient" class="form-label">Bairro</label>
                 <input type="text" class="form-control" id="inputNeighborhoodClient" spellcheck="false" maxlength="12"
                     required>
             </div>
 
-            <!--Cidade-->
             <div class="col-md-4">
                 <label for="inputCityClient" class="form-label">Cidade</label>
                 <input type="text" class="form-control" id="inputCityClient" spellcheck="false" maxlength="12" required>
@@ -135,7 +118,6 @@
                 </select>
             </div>
 
-            <!--Botões-->
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
                 <button type="submit" class="btn btn-warning" id="btnUpdate" onclick="atualizarCliente()"
@@ -148,9 +130,7 @@
         </form>
     </div>
 
-    <!--Bootstrap-->
     <script src="../public/js/bootstrap.min.js"></script>
-    <!-- Javascript Personalizado -->
     <script src="../public/js/script.js"></script>
     <script src="rendererCliente.js"></script>
 </body>

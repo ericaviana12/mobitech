@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
-/** IMPORTAÇÃO DE FONTES OFF-LINE **/
 @font-face {
     font-family: "Fredoka";
     src: url("../Fredoka/Fredoka-VariableFont_wdth\,wght.ttf");
@@ -10,7 +9,6 @@ body {
     font-family: "Fredoka";
 }
 
-/* VARIÁVEIS PARA AS CORES DAS NOTAS */
 :root {
     --amarelo: #fff68f;
     --azul: #add8e6;
@@ -21,7 +19,6 @@ body {
     --cinza: #6c757d;
 }
 
-/* BOTÕES NA TELA PRINCIPAL */
 .button img {
     margin: 50px 15px 25px 15px;
     padding: 5px;
@@ -29,7 +26,6 @@ body {
     cursor: pointer;
 }
 
-/* BOTÃO RESET */
 #btnReset {
     width: 50px;
     height: 50px;
@@ -39,7 +35,6 @@ body {
     cursor: pointer;
 }
 
-/* LOGO */
 #logo {
     position: fixed;
     bottom: 40px;
@@ -48,12 +43,10 @@ body {
     cursor: none;
 }
 
-/* OCULTAR O CAMPO ID DO CLIENTE (NA PÁGINA CLIENTE DO SISTEMA) */
 #idClient {
     display: none;
 }
 
-/* RODAPÉ */
 footer {
     width: 100%;
     height: 45px;
@@ -70,13 +63,10 @@ footer p {
     font-size: 1.25em;
 }
 
-/** SOBRE **/
 #sobre h3 {
     color: var(--cinza);
     font-weight: 500;
 }
-
-/** LISTA SUSPENSA **/
 
 .suggestion-list {
     position: absolute;
@@ -99,17 +89,16 @@ footer p {
     background-color: #f0f0f0;
 }
 
-/* BOTÃO BUSCAR OS */
 #btnBuscaOS {
     margin-left: 200px;
 }
 
 .os-button {
-    padding: 5px 12px;      /* Altura pequena, largura maior */
-    border-radius: 5px;     /* Retângulo com cantos suaves */
-    font-size: 16px;        /* Tamanho da fonte confortável */
-    white-space: nowrap;    /* Impede quebra de linha */
-    min-width: 110px;       /* Largura mínima opcional */
-    display: inline-block;  /* Garante comportamento como botão */
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    white-space: nowrap;
+    min-width: 110px;
+    display: inline-block;
     cursor: pointer;
 }

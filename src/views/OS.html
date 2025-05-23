@@ -5,11 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ordem de Serviço</title>
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-    <!-- CSS personalizado -->
     <link rel="stylesheet" href="../public/css/style.css">
-    <!-- impedir a execução de scripts externos ou não autorizados -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
 </head>
 
@@ -17,10 +14,8 @@
     <div class="container">
         <form class="mt-1 row g-3" id="frmOS">
 
-            <!-- Buscar cliente -->
             <div class="container mt-2">
-
-                <div class="mb-2 row"> <!-- Cria uma linha -->
+                <div class="mb-2 row">
                     <div class="col-sm-4">
                         <label for="inputSearchClient" class="form-label">Buscar Cliente</label>
                         <div class="input-group">
@@ -30,40 +25,34 @@
                                 <img src="../public/img/search.png" alt="lupa" width="20">
                             </span>
                         </div>
-                        <!-- Lista de sugestões usando classes bootstrap -->
                         <ul id="viewListSuggestion" class="list-group suggestion-list"></ul>
                     </div>
 
-                    <!-- Nº OS -->
                     <div class="col-sm-4">
                         <label class="form-label">Nº OS</label>
                         <input type="text" class="form-control" id="inputOS" disabled>
                     </div>
 
-                    <!-- Data de entrada OS -->
                     <div class="col-sm-4">
                         <label class="form-label">Data de entrada</label>
                         <input type="text" class="form-control" id="inputData" disabled>
                     </div>
                 </div>
 
-                <div class="mb-2 row"> <!-- Cria uma linha -->
+                <div class="mb-2 row">
 
-                    <!-- Id do cliente-->
                     <div class="col-sm-4">
                         <label for="inputIdClient" class="form-label">Id do cliente</label>
                         <input type="text" class="form-control" id="inputIdClient" spellcheck="false" maxlength="15"
                             disabled>
                     </div>
 
-                    <!-- Nome -->
                     <div class="col-sm-4">
                         <label for="inputNameClient" class="form-label">Nome</label>
                         <input type="text" class="form-control" id="inputNameClient" spellcheck="false" maxlength="30"
                             disabled>
                     </div>
 
-                    <!-- Telefone -->
                     <div class="col-sm-4">
                         <label for="inputPhoneClient" class="form-label">Telefone</label>
                         <input type="tel" class="form-control" id="inputPhoneClient" spellcheck="false" maxlength="15"
@@ -72,11 +61,10 @@
                 </div>
             </div>
 
-            <input type="text" id="idClient"> <!-- oculto -->
+            <input type="text" id="idClient">
 
-            <fieldset class="border p-4 mt-4"> <!-- Cria um campo de identificação com borda e padding -->
-                <div class="mb-2 row"> <!-- Cria uma linha -->
-                    <!-- Status -->
+            <fieldset class="border p-4 mt-4">
+                <div class="mb-2 row">
                     <div class="col-sm-6">
                         <label class="form-label">Status da OS</label>
                         <select class="form-select" id="inputStatus" required>
@@ -89,61 +77,52 @@
                         </select>
                     </div>
 
-                    <!-- Tipo de móvel -->
                     <div class="col-sm-6">
                         <label class="form-label" for="inputFurniture">Tipo de móvel</label>
                         <input type="text" class="form-control" id="inputFurniture" maxlength="44" required>
                     </div>
                 </div>
 
-                <div class="mb-2 row"> <!-- Cria uma linha -->
-                    <!-- Modelo / Marca do móvel -->
+                <div class="mb-2 row">
                     <div class="col-sm-4">
                         <label class="form-label" for="inputModel">Modelo / Marca do móvel</label>
                         <input type="text" class="form-control" id="inputModel" maxlength="20">
                     </div>
 
-                    <!-- Número de volumes -->
                     <div class="col-sm-4">
                         <label class="form-label" for="inputVolumes">Número de volumes</label>
                         <input type="number" class="form-control" id="inputVolumes" step="1" min="1" required>
                     </div>
 
-                    <!-- Ambiente de montagem -->
                     <div class="col-sm-4">
                         <label class="form-label" for="inputEnvironment">Ambiente de montagem</label>
                         <input type="text" class="form-control" id="inputEnvironment" maxlength="35">
                     </div>
                 </div>
 
-                <div class="mb-2 row"> <!-- Cria uma linha -->
-                    <!-- Problemas relatados -->
+                <div class="mb-2 row">
                     <div class="col-sm-6">
                         <label class="form-label" for="inputProblem">Problemas relatados / Detalhes do cliente</label>
                         <input type="text" class="form-control" id="inputProblem" maxlength="54" required>
                     </div>
 
-                    <!-- Material necessário -->
                     <div class="col-sm-6">
                         <label class="form-label" for="inputMaterial">Material necessário</label>
                         <input type="text" class="form-control" id="inputMaterial" maxlength="80">
                     </div>
                 </div>
 
-                <div class="mb-2 row"> <!-- Cria uma linha -->
-                    <!-- Montador responsável -->
+                <div class="mb-2 row">
                     <div class="col-sm-4">
                         <label class="form-label" for="inputSpecialist">Montador responsável</label>
                         <input type="text" class="form-control" id="inputSpecialist" maxlength="20">
                     </div>
 
-                    <!-- Observações -->
                     <div class="col-sm-4">
                         <label class="form-label" for="inputObs">Observações</label>
                         <input type="text" class="form-control" id="inputObs" maxlength="35">
                     </div>
 
-                    <!-- Valor do serviço -->
                     <div class="col-sm-4">
                         <label class="form-label" for="inputTotal">Valor</label>
                         <input type="number" class="form-control" id="inputTotal" step="0.01" min="0">
@@ -164,11 +143,8 @@
         </form>
     </div>
 
-    <!-- Bootstrap -->
     <script src="../public/js/bootstrap.min.js"></script>
-    <!-- rendererOs -->
     <script src="rendererOS.js"></script>
-
 </body>
 
 </html>

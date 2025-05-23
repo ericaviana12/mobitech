@@ -1,6 +1,3 @@
-// ===========================================================
-// == Busca avançada =========================================
-
 const input = document.getElementById('inputSearchClient')
 const suggestionList = document.getElementById('viewListSuggestion')
 let idClient = document.getElementById('inputIdClient')
@@ -10,31 +7,26 @@ let phoneClient = document.getElementById('inputPhoneClient')
 let arrayClients = []
 
 input.addEventListener('input', () => {
-    const search = input.value.toLowerCase() // Captura o que foi digitado e converte tudo para minúsculo
+    const search = input.value.toLowerCase()
     suggestionList.innerHTML = ""
 
-    // Buscar os nomes dos clientes no banco
     api.searchClients()
 
-    // Listar os clientes 
     api.listClients((event, clients) => {
         const listaClientes = JSON.parse(clients)
         arrayClients = listaClientes
 
-        // Filtra os clientes cujo nome (c.nomeCliente) contém o texto digitado(search)
         const results = arrayClients.filter(c =>
             c.nomeCliente && c.nomeCliente.toLowerCase().includes(search)
-        ).slice(0, 10) // máximo 10 nomes
+        ).slice(0, 10)
 
-        suggestionList.innerHTML = "" // Limpa novamente após possível atraso
+        suggestionList.innerHTML = ""
 
-        // Para cada resultado, cria um item da lista
         results.forEach(c => {
             const item = document.createElement('li')
             item.classList.add('list-group-item', 'list-group-item-action')
             item.textContent = c.nomeCliente
 
-            // Adiciona evento de clique no ítem da lista para preencher os campos do form
             item.addEventListener('click', () => {
                 idClient.value = c._id
                 nameClient.value = c.nomeCliente
@@ -43,38 +35,29 @@ input.addEventListener('input', () => {
                 suggestionList.innerHTML = ""
             })
 
-            // Adiciona os nomes (itens <li>) a lista <ul>
             suggestionList.appendChild(item)
         })
     })
 })
 
-// Setar o foco no campo de busca (validação de busca do cliente obrigatória)
 api.setSearch((args) => {
     input.focus()
 })
 
-// Ocultar lista ao clicar fora
 document.addEventListener('click', (e) => {
     if (!input.contains(e.target) && !suggestionList.contains(e.target)) {
         suggestionList.innerHTML = ""
     }
 })
 
-// == Fim - busca avançada =====================================
-// =============================================================
-
-// Iniciar a janela OS alterando as propriedades de alguns elementos
 document.addEventListener('DOMContentLoaded', () => {
-    // Desativar os botões
+
     btnUpdate.disabled = true
     btnDelete.disabled = true
 })
 
-// Criar um vetor para manipulação dos dados da OS
 let arrayOS = []
 
-// captura dos IDs do form OS
 let frmOS = document.getElementById('frmOS')
 let statusOS = document.getElementById('inputStatus')
 let furniture = document.getElementById('inputFurniture')
@@ -86,30 +69,17 @@ let material = document.getElementById('inputMaterial')
 let specialist = document.getElementById('inputSpecialist')
 let obs = document.getElementById('inputObs')
 let total = document.getElementById('inputTotal')
-// captura do id da OS (CRUD Delete e Update)
 let idOS = document.getElementById('inputOS')
-// captura do id do campo data
 let dateOS = document.getElementById('inputData')
 
-// ============================================================
-// == Reset form ==============================================
 
 function resetForm() {
-    // Limpar os campos e resetar o formulário com as configurações pré definidas
     location.reload()
 }
 
-// Recebimento do pedido do main para resetar o form
 api.resetForm((args) => {
     resetForm()
 })
-
-// == Fim - reset form ========================================
-// ============================================================
-
-
-// ============================================================
-// == CRUD Create =============================================
 
 function criarOS() {
     const os = {
@@ -128,23 +98,14 @@ function criarOS() {
     api.newOS(os)
 }
 
-// == Fim - CRUD Create =======================================
-// ============================================================
-
-
-// ============================================================
-// == CRUD Read ===============================================
-
 function findOS() {
     api.searchOS()
 }
 
 api.renderOS((event, dataOS) => {
-    console.log(dataOS)
+    
     const os = JSON.parse(dataOS)
-    // preencher os campos com os dados da OS
     idOS.value = os._id
-    // formatar data
     const data = new Date(os.dataEntrada)
     const formatada = data.toLocaleString("pt-BR", {
         day: "2-digit",
@@ -167,23 +128,16 @@ api.renderOS((event, dataOS) => {
     specialist.value = os.montador
     obs.value = os.observacao
     total.value = os.valor
-    // desativar o botão adicionar
+
     btnCreate.disabled = true
-    // ativar os botões editar e excluir
     btnUpdate.disabled = false
     btnDelete.disabled = false
 })
 
-// == Fim - CRUD Read =========================================
-// ============================================================
-
-
-// ============================================================
-// == CRUD Update =============================================
 
 function atualizarOS() {
     const osEditada = {
-        _id: idOS.value, // importante passar o ID para localizar no banco
+        _id: idOS.value,
         idCliente: idClient.value,
         statusOS: statusOS.value,
         movel: furniture.value,
@@ -199,7 +153,6 @@ function atualizarOS() {
     api.updateOS(osEditada)
 }
 
-// evento submit que decide qual função chamar
 frmOS.addEventListener('submit', (event) => {
     event.preventDefault()
 
@@ -208,21 +161,6 @@ frmOS.addEventListener('submit', (event) => {
         return
     }
 
-    console.log(
-        idOS.value,
-        idClient.value,
-        statusOS.value,
-        furniture.value,
-        model.value,
-        volumes.value,
-        environment.value,
-        problem.value,
-        material.value,
-        specialist.value,
-        obs.value,
-        total.value
-    )
-
     if (idOS.value === "") {
         criarOS()
     } else {
@@ -230,24 +168,9 @@ frmOS.addEventListener('submit', (event) => {
     }
 })
 
-// == Fim - CRUD Update =======================================
-// ============================================================
-
-
-// ============================================================
-// == CRUD Delete =============================================
-
 function removeOS() {
-    console.log(idOS.value) // Passo 1 (receber do form o id da OS)
-    api.deleteOS(idOS.value) // Passo 2 (enviar o id da OS ao main)
+    api.deleteOS(idOS.value)
 }
-
-// == Fim - CRUD Delete =======================================
-// ============================================================
-
-
-// ============================================================
-// == Imprimir OS =============================================
 
 const btnPrintOS = document.getElementById('btnPrintOS')
 
@@ -260,7 +183,6 @@ btnPrintOS.addEventListener('click', () => {
 })
 
 function imprimirOS() {
-    // Monta o conteúdo para impressão
     const conteudo = `
         <html>
         <head>
@@ -347,7 +269,6 @@ function imprimirOS() {
         </html>
     `
 
-    // Abrir nova janela para impressão
     let janelaPrint = window.open('', '', 'width=800,height=600')
     janelaPrint.document.write(conteudo)
     janelaPrint.document.close()
@@ -355,6 +276,3 @@ function imprimirOS() {
     janelaPrint.print()
     janelaPrint.close()
 }
-
-// == Fim - Imprimir OS =======================================
-// ============================================================
