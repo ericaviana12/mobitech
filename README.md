@@ -1,6 +1,6 @@
 ![GitHub license](https://img.shields.io/github/license/ericaviana12/mobitech)
 
-# 🛠️ Mobitech - Sistema de Ordens de Serviço para Montadores
+# 🛠️ Mobitech - Sistema de ordens de serviço para montadores de móveis
 
 **Mobitech** é um sistema de gerenciamento de ordens de serviço (OS) voltado para montadores de móveis. Permite o cadastro de clientes, criação e controle de OS, geração de relatórios e impressão de ordens para entrega ao cliente.
 
@@ -32,10 +32,6 @@
 ## Autora
 Erica Viana
 
-## Pré-requisitos de instalação:
-- Windows 10 ou superior
-- Ter o banco de dados MongoDB instalado
-
 ## Tecnologias utilizadas
 
 - [Electron](https://www.electronjs.org/) – Aplicação desktop
@@ -44,6 +40,10 @@ Erica Viana
 - [MongoDB](https://www.mongodb.com/) – Banco de dados NoSQL
 - [jsPDF](https://github.com/parallax/jsPDF) – Geração de relatórios em PDF
 - HTML, CSS e JavaScript
+
+## Pré-requisitos de instalação:
+- Windows 10 ou superior
+- Ter o banco de dados MongoDB instalado
 
 ### Instalação do MongoDB:
 Acesse o site oficial:
