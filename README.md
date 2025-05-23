@@ -30,7 +30,8 @@
 <img src="src/public/img/pageOs.png" alt="Página OS" width="400"/>
 
 ## Autora
-Erica Viana
+
+[Érica Viana](https://github.com/ericaviana12)
 
 ## Tecnologias utilizadas
 
