@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-/** importação de fonts off-line **/
+/** IMPORTAÇÃO DE FONTES OFF-LINE **/
 @font-face {
     font-family: "Fredoka";
     src: url("../Fredoka/Fredoka-VariableFont_wdth\,wght.ttf");
@@ -21,7 +21,7 @@ body {
     --cinza: #6c757d;
 }
 
-/* Botões na tela principal */
+/* BOTÕES NA TELA PRINCIPAL */
 .button img {
     margin: 50px 15px 25px 15px;
     padding: 5px;
@@ -48,7 +48,7 @@ body {
     cursor: none;
 }
 
-/* ocultar o campo id do cliente (na página cliente do sistema) */
+/* OCULTAR O CAMPO ID DO CLIENTE (NA PÁGINA CLIENTE DO SISTEMA) */
 #idClient {
     display: none;
 }
@@ -99,14 +99,17 @@ footer p {
     background-color: #f0f0f0;
 }
 
-/* Botão Buscar OS */
+/* BOTÃO BUSCAR OS */
 #btnBuscaOS {
-    margin-left: 370px;
+    margin-left: 200px;
 }
 
-/* Botões na tela OS */
 .os-button {
-    padding: 5px;
-    border-radius: 5px;
+    padding: 5px 12px;      /* Altura pequena, largura maior */
+    border-radius: 5px;     /* Retângulo com cantos suaves */
+    font-size: 16px;        /* Tamanho da fonte confortável */
+    white-space: nowrap;    /* Impede quebra de linha */
+    min-width: 110px;       /* Largura mínima opcional */
+    display: inline-block;  /* Garante comportamento como botão */
     cursor: pointer;
 }

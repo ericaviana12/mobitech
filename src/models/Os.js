@@ -21,26 +21,26 @@ const osSchema = new Schema({
     movel: {
         type: String
     },
-    marca: {
+    modelo: {
         type: String        
     },
     volumes: {
         type: String  
     },
     ambiente: {
-        type: String
+        type: String 
     },
-    problemas: {
+    problema: {
         type: String  
     },
     material: {
-        type: String  
+        type: String 
     },
     montador: {
-        type: String 
+        type: String  
     },
-    observacoes: {
-        type: String 
+    observacao: {
+        type: String
     },
     valor: {
         type: String 
@@ -49,4 +49,4 @@ const osSchema = new Schema({
 
 // exportar para o main o modelo de dados
 // OBS: OS 
-module.exports = model('Os', osSchema)
+module.exports = model('OS', osSchema)
