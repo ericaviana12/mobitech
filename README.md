@@ -1,6 +1,4 @@
-[![GitHub license](https://img.shields.io/github/license/ericaviana12/mobitech)](https://github.com/ericaviana12/mobitech/blob/main/LICENSE)
-
-Sistema de montagem de móveis...
+![GitHub license](https://img.shields.io/github/license/ericaviana12/mobitech?style=flat-square&link=https%3A%2F%2Fgithub.com%2Fericaviana12%2Fmobitech)
 
 # 🛠️ Mobitech - Sistema de ordens de serviço para montadores de móveis
 
