@@ -233,37 +233,74 @@ function imprimirOS() {
                     margin-top: 50px;
                     font-size: 16px;
                 }
+
+                .termos {
+                    font-size: 11px;
+                    line-height: 1.6;
+                    margin-top: 40px;
+                    border-top: 1px dashed #aaa;
+                    padding-top: 20px;
+                }
+
+                .termos h3 {
+                    font-size: 14px;
+                    color: #005B8F;
+                    margin-bottom: 8px;
+                }
             </style>
         </head>
         <body>
             <h1>Ordem de serviço - MobiTech</h1>
             <div class="section">
-                <div><span class="field-label">Número OS:</span> ${idOS.value}</div>
-                <div><span class="field-label">Data:</span> ${dateOS.value}</div>
-                <div><span class="field-label">Cliente ID:</span> ${idClient.value}</div>
-                <div><span class="field-label">Status:</span> ${statusOS.value}</div>
+                <div><span class="label">Número OS:</span> ${idOS.value}</div>
+                <div><span class="label">Data:</span> ${dateOS.value}</div>
+                <div><span class="label">Cliente ID:</span> ${idClient.value}</div>
+                <div><span class="label">Status:</span> ${statusOS.value}</div>
             </div>
 
             <div class="section">
-                <div><span class="field-label">Móvel:</span> ${furniture.value}</div>
-                <div><span class="field-label">Modelo:</span> ${model.value}</div>
-                <div><span class="field-label">Volumes:</span> ${volumes.value}</div>
-                <div><span class="field-label">Ambiente:</span> ${environment.value}</div>
+                <div><span class="label">Móvel:</span> ${furniture.value}</div>
+                <div><span class="label">Modelo:</span> ${model.value}</div>
+                <div><span class="label">Volumes:</span> ${volumes.value}</div>
+                <div><span class="label">Ambiente:</span> ${environment.value}</div>
             </div>
 
             <div class="section">
-                <div><span class="field-label">Problema:</span> ${problem.value}</div>
-                <div><span class="field-label">Material:</span> ${material.value}</div>
-                <div><span class="field-label">Montador:</span> ${specialist.value}</div>
-                <div><span class="field-label">Observação:</span> ${obs.value}</div>
+                <div><span class="label">Problema:</span> ${problem.value}</div>
+                <div><span class="label">Material:</span> ${material.value}</div>
+                <div><span class="label">Montador:</span> ${specialist.value}</div>
+                <div><span class="label">Observação:</span> ${obs.value}</div>
             </div>
 
             <div class="section">
-                <div><span class="field-label">Total:</span> R$ ${total.value}</div>
+                <div><span class="label">Total:</span> R$ ${total.value}</div>
             </div>
 
             <div style="text-align:center; margin-top: 50px;">
                 <p>Assinatura do Cliente: ___________________________</p>
+            </div>
+
+            <div class="termos">
+                <h3>Termo de Serviço e Garantia</h3>
+                <p>O serviço de montagem descrito nesta ordem de serviço foi executado conforme as especificações fornecidas pelo cliente. É de responsabilidade do cliente a conferência prévia do local de instalação, condições do produto e presença de todas as peças e ferragens necessárias.</p>
+
+                <p>A garantia cobre exclusivamente defeitos de montagem ou falhas atribuídas ao serviço prestado, não se estendendo a problemas decorrentes de mau uso, transporte inadequado ou montagem/desmontagem posterior sem autorização técnica.</p>
+
+                <p>O prazo de garantia legal é de <strong>90 (noventa) dias</strong> contados a partir da conclusão do serviço, conforme o artigo 26 do Código de Defesa do Consumidor (Lei 8.078/1990).</p>
+
+                <h3>Base Legal</h3>
+                <p>Este serviço segue o que determina o Código de Defesa do Consumidor, especialmente os artigos:</p>
+                <ul>
+                    <li><strong>Art. 6º:</strong> Direitos básicos do consumidor</li>
+                    <li><strong>Art. 20:</strong> Qualidade e responsabilidade pelo serviço prestado</li>
+                    <li><strong>Art. 26:</strong> Prazo para reclamações de defeitos aparentes</li>
+                </ul>
+                <p>Também está respaldado pelo Código Civil (Lei 10.406/2002), artigos:</p>
+                <ul>
+                    <li><strong>Art. 593:</strong> Contrato de prestação de serviço</li>
+                    <li><strong>Art. 927:</strong> Obrigação de reparação em caso de danos</li>
+                </ul>
+                <p>Ao assinar este documento, o cliente declara estar ciente e de acordo com os termos acima.</p>
             </div>
         </body>
         </html>
