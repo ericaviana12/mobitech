@@ -168,11 +168,11 @@ function buscarCliente() {
     btnUpdate.disabled = true
     btnDelete.disabled = true
 
-    const cliValor = document.getElementById('searchClient').value.trim();
+    const cliValor = document.getElementById('searchClient').value.trim()
     if (cliValor === "") {
         api.validateSearch()
     } else {
-        api.searchName(cliValor);
+        api.searchName(cliValor)
 
         api.renderClient((event, client) => {
             const clientData = JSON.parse(client)

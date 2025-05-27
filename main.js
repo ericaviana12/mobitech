@@ -369,7 +369,7 @@ ipcMain.on('search-name', async (event, cliValor) => {
                 } else {
                     event.reply('reset-form')
                 }
-            });
+            })
         } else {
             event.reply('render-client', JSON.stringify(client))
         }

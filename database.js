@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const url = 'mongodb+srv://admin:123Senac@ericaviana12.ozwku.mongodb.net/dbmobitech'
 
-let conectado = false;
+let conectado = false
 
 const conectar = async () => {
     if (!conectado) {
