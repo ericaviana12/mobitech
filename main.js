@@ -691,7 +691,7 @@ async function relatorioTodasOS() {
         doc.text("Nº OS", 10, y)
         doc.text("Móvel", 70, y)
         doc.text("Problema", 130, y)
-        doc.text("Status", 230, y)
+        doc.text("Status", 220, y)
         doc.text("Valor", 270, y)
         y += 5
         doc.setLineWidth(0.5)
@@ -710,7 +710,7 @@ async function relatorioTodasOS() {
                 doc.text("Nº OS", 10, y)
                 doc.text("Móvel", 70, y)
                 doc.text("Problema", 130, y)
-                doc.text("Status", 230, y)
+                doc.text("Status", 220, y)
                 doc.text("Valor", 270, y)
                 y += 5
                 doc.setLineWidth(0.5)
@@ -721,7 +721,7 @@ async function relatorioTodasOS() {
             doc.text(String(o._id || ''), 10, y)
             doc.text(String(o.movel || ''), 70, y)
             doc.text(String(o.problema || ''), 130, y)
-            doc.text(String(o.statusOS || ''), 230, y)
+            doc.text(String(o.statusOS || ''), 220, y)
             doc.text(formatarValor(o.valor || '0'), 270, y)
             y += 10
         })
