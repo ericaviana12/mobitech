@@ -4,21 +4,11 @@
   "description": "Aplicação para cadastro de clientes e ordem de serviço para montagem de móveis.",
   "main": "main.js",
   "devDependencies": {
-    "@electron-forge/cli": "^7.8.1",
-    "@electron-forge/maker-deb": "^7.8.1",
-    "@electron-forge/maker-rpm": "^7.8.1",
-    "@electron-forge/maker-squirrel": "^7.8.1",
-    "@electron-forge/maker-zip": "^7.8.1",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
-    "@electron-forge/plugin-fuses": "^7.8.1",
-    "@electron/fuses": "^1.8.0",
-    "electron": "^36.2.0"
+    "electron": "^36.3.1"
   },
   "scripts": {
-    "start": "electron-forge start",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -35,7 +25,6 @@
   "homepage": "https://github.com/ericaviana12/mobitech#readme",
   "dependencies": {
     "electron-prompt": "^1.7.0",
-    "electron-squirrel-startup": "^1.0.1",
     "jspdf": "^3.0.1",
     "mongoose": "^8.14.3"
   }
