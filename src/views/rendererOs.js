@@ -84,8 +84,8 @@ api.resetForm((args) => {
 function criarOS() {
     const os = {
         idClient_OS: idClient.value,
-        nameClient_OS: nameClient.value,     // novo
-        phoneClient_OS: phoneClient.value,   // novo
+        nameClient_OS: nameClient.value,
+        phoneClient_OS: phoneClient.value,
         stat_OS: statusOS.value,
         furniture_OS: furniture.value,
         model_OS: model.value,
@@ -143,8 +143,8 @@ function atualizarOS() {
     const osEditada = {
         _id: idOS.value,
         idCliente: idClient.value,
-        nomeCliente: nameClient.value,        // novo
-        telefoneCliente: phoneClient.value,   // novo
+        nomeCliente: nameClient.value,
+        telefoneCliente: phoneClient.value,
         statusOS: statusOS.value,
         movel: furniture.value,
         modelo: model.value,

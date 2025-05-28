@@ -8,10 +8,10 @@ const osSchema = new Schema({
     idCliente: {
         type: String,        
     },
-    nomeCliente: {             // novo campo
+    nomeCliente: {
         type: String
     },
-    telefoneCliente: {         // novo campo
+    telefoneCliente: {
         type: String
     },
     statusOS: {

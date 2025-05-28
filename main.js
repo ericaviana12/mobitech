@@ -477,8 +477,8 @@ ipcMain.on('new-os', async (event, os) => {
     try {
         const newOS = new osModel({
             idCliente: os.idClient_OS,
-            nomeCliente: os.nameClient_OS,           // novo
-            telefoneCliente: os.phoneClient_OS,      // novo
+            nomeCliente: os.nameClient_OS,
+            telefoneCliente: os.phoneClient_OS,
             statusOS: os.stat_OS,
             movel: os.furniture_OS,
             modelo: os.model_OS,
@@ -552,8 +552,8 @@ ipcMain.on('update-os', async (event, os) => {
             os._id,
             {
                 idCliente: os.idCliente,
-                nomeCliente: os.nomeCliente,             // novo
-                telefoneCliente: os.telefoneCliente,     // novo
+                nomeCliente: os.nomeCliente,
+                telefoneCliente: os.telefoneCliente,
                 statusOS: os.statusOS,
                 movel: os.movel,
                 modelo: os.modelo,
