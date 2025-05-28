@@ -84,6 +84,8 @@ api.resetForm((args) => {
 function criarOS() {
     const os = {
         idClient_OS: idClient.value,
+        nameClient_OS: nameClient.value,     // novo
+        phoneClient_OS: phoneClient.value,   // novo
         stat_OS: statusOS.value,
         furniture_OS: furniture.value,
         model_OS: model.value,
@@ -103,7 +105,7 @@ function findOS() {
 }
 
 api.renderOS((event, dataOS) => {
-    
+
     const os = JSON.parse(dataOS)
     idOS.value = os._id
     const data = new Date(os.dataEntrada)
@@ -118,6 +120,8 @@ api.renderOS((event, dataOS) => {
 
     dateOS.value = formatada
     idClient.value = os.idCliente
+    nameClient.value = os.nomeCliente || ""
+    phoneClient.value = os.telefoneCliente || ""
     statusOS.value = os.statusOS
     furniture.value = os.movel
     model.value = os.modelo
@@ -139,6 +143,8 @@ function atualizarOS() {
     const osEditada = {
         _id: idOS.value,
         idCliente: idClient.value,
+        nomeCliente: nameClient.value,        // novo
+        telefoneCliente: phoneClient.value,   // novo
         statusOS: statusOS.value,
         movel: furniture.value,
         modelo: model.value,
@@ -254,8 +260,13 @@ function imprimirOS() {
             <div class="section">
                 <div><span class="label">Número OS:</span> ${idOS.value}</div>
                 <div><span class="label">Data:</span> ${dateOS.value}</div>
-                <div><span class="label">Cliente ID:</span> ${idClient.value}</div>
                 <div><span class="label">Status:</span> ${statusOS.value}</div>
+            </div>
+
+            <div class="section">
+                <div><span class="label">Cliente ID:</span> ${idClient.value}</div>
+                <div><span class="label">Nome do Cliente:</span> ${nameClient.value}</div>      <!-- novo -->
+                <div><span class="label">Telefone do Cliente:</span> ${phoneClient.value}</div>  <!-- novo -->
             </div>
 
             <div class="section">
@@ -288,18 +299,6 @@ function imprimirOS() {
 
                 <p>O prazo de garantia legal é de <strong>90 (noventa) dias</strong> contados a partir da conclusão do serviço, conforme o artigo 26 do Código de Defesa do Consumidor (Lei 8.078/1990).</p>
 
-                <h3>Base Legal</h3>
-                <p>Este serviço segue o que determina o Código de Defesa do Consumidor, especialmente os artigos:</p>
-                <ul>
-                    <li><strong>Art. 6º:</strong> Direitos básicos do consumidor</li>
-                    <li><strong>Art. 20:</strong> Qualidade e responsabilidade pelo serviço prestado</li>
-                    <li><strong>Art. 26:</strong> Prazo para reclamações de defeitos aparentes</li>
-                </ul>
-                <p>Também está respaldado pelo Código Civil (Lei 10.406/2002), artigos:</p>
-                <ul>
-                    <li><strong>Art. 593:</strong> Contrato de prestação de serviço</li>
-                    <li><strong>Art. 927:</strong> Obrigação de reparação em caso de danos</li>
-                </ul>
                 <p>Ao assinar este documento, o cliente declara estar ciente e de acordo com os termos acima.</p>
             </div>
         </body>
