@@ -11,4 +11,6 @@ function obterData(){
     return dataAtual.toLocaleDateString('pt-BR', options)
 }
 
-document.getElementById('dataAtual').innerHTML = obterData()
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('dataAtual').innerHTML = obterData()
+})

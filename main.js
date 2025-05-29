@@ -211,12 +211,20 @@ const template = [
             {
                 label: 'Recarregar',
                 role: 'reload'
+            },
+            {
+                label: 'DevTools',
+                role: 'toggleDevTools'
             }
         ]
     },
     {
         label: 'Ajuda',
         submenu: [
+            {
+                label: 'Repositório',
+                click: () => shell.openExternal('https://github.com/ericaviana12/mobitech')
+            },
             {
                 label: 'Sobre',
                 click: () => aboutWindow()
@@ -610,11 +618,12 @@ ipcMain.on('delete-os', async (event, idOS) => {
     }
 })
 
+
 async function relatorioOSporStatus(statusDesejado, tituloRelatorio, nomeArquivo) {
     try {
         const osFiltradas = await osModel.find({ statusOS: statusDesejado }).sort({ dataEntrada: -1 })
 
-        const doc = new jsPDF('p', 'mm', 'a4')
+        const doc = new jsPDF('l', 'mm', 'a4')
         const imagePath = path.join(__dirname, 'src', 'public', 'img', 'logo.png')
         const imageBase64 = fs.readFileSync(imagePath, { encoding: 'base64' })
         doc.addImage(imageBase64, 'PNG', 5, 8)
@@ -629,13 +638,15 @@ async function relatorioOSporStatus(statusDesejado, tituloRelatorio, nomeArquivo
         let y = 60
         doc.setFontSize(12)
 
-        doc.text("Nº OS", 14, y)
-        doc.text("Móvel", 70, y)
-        doc.text("Problema", 120, y)
-        doc.text("Valor", 170, y)
+        doc.text("Nº OS", 10, y)
+        doc.text("Nome Cliente", 70, y)
+        doc.text("Telefone", 110, y)
+        doc.text("Móvel", 160, y)
+        doc.text("Problema", 200, y)
+        doc.text("Valor", 260, y)
         y += 5
         doc.setLineWidth(0.5)
-        doc.line(10, y, 200, y)
+        doc.line(5, y, 290, y)
         y += 10
 
         const formatarValor = (valorStr) => {
@@ -647,20 +658,24 @@ async function relatorioOSporStatus(statusDesejado, tituloRelatorio, nomeArquivo
             if (y > 280) {
                 doc.addPage()
                 y = 20
-                doc.text("Nº OS", 14, y)
-                doc.text("Móvel", 70, y)
-                doc.text("Problema", 120, y)
-                doc.text("Valor", 170, y)
+                doc.text("Nº OS", 10, y)
+                doc.text("Nome Cliente", 70, y)
+                doc.text("Telefone", 110, y)
+                doc.text("Móvel", 160, y)
+                doc.text("Problema", 200, y)
+                doc.text("Valor", 260, y)
                 y += 5
                 doc.setLineWidth(0.5)
                 doc.line(10, y, 200, y)
                 y += 10
             }
 
-            doc.text(String(o._id || ''), 14, y)
-            doc.text(String(o.movel || ''), 70, y)
-            doc.text(String(o.problema || ''), 120, y)
-            doc.text(formatarValor(o.valor || '0'), 170, y)
+            doc.text(String(o._id || ''), 10, y)
+            doc.text(String(o.nomeCliente || ''), 70, y)
+            doc.text(String(o.telefoneCliente || ''), 110, y)
+            doc.text(String(o.movel || ''), 160, y)
+            doc.text(String(o.problema || ''), 200, y)
+            doc.text(formatarValor(o.valor || '0'), 260, y)
             y += 10
         })
 
@@ -700,14 +715,17 @@ async function relatorioTodasOS() {
         let y = 60
         doc.setFontSize(11)
 
-        doc.text("Nº OS", 10, y)
-        doc.text("Móvel", 70, y)
-        doc.text("Problema", 130, y)
+        doc.text("Nº OS", 5, y)
+        doc.text("Nome Cliente", 60, y)
+        doc.text("Telefone", 90, y)
+        doc.text("Móvel", 130, y)
+        doc.text("Problema", 160, y)
         doc.text("Status", 220, y)
         doc.text("Valor", 270, y)
+
         y += 5
         doc.setLineWidth(0.5)
-        doc.line(10, y, 285, y)
+        doc.line(5, y, 290, y)
         y += 10
 
         const formatarValor = (valorStr) => {
@@ -719,9 +737,11 @@ async function relatorioTodasOS() {
             if (y > 190) {
                 doc.addPage()
                 y = 20
-                doc.text("Nº OS", 10, y)
-                doc.text("Móvel", 70, y)
-                doc.text("Problema", 130, y)
+                doc.text("Nº OS", 5, y)
+                doc.text("Nome Cliente", 60, y)
+                doc.text("Telefone", 90, y)
+                doc.text("Móvel", 130, y)
+                doc.text("Problema", 160, y)
                 doc.text("Status", 220, y)
                 doc.text("Valor", 270, y)
                 y += 5
@@ -730,9 +750,11 @@ async function relatorioTodasOS() {
                 y += 10
             }
 
-            doc.text(String(o._id || ''), 10, y)
-            doc.text(String(o.movel || ''), 70, y)
-            doc.text(String(o.problema || ''), 130, y)
+            doc.text(String(o._id || ''), 5, y)
+            doc.text(String(o.nomeCliente || ''), 60, y)
+            doc.text(String(o.telefoneCliente || ''), 90, y)
+            doc.text(String(o.movel || ''), 130, y)
+            doc.text(String(o.problema || ''), 160, y)
             doc.text(String(o.statusOS || ''), 220, y)
             doc.text(formatarValor(o.valor || '0'), 270, y)
             y += 10
