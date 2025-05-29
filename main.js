@@ -16,13 +16,15 @@ const createWindow = () => {
         height: 720,
         resizable: false,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false
         }
     })
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
-    win.loadFile('./src/views/index.html')
+    win.loadFile(path.join(__dirname, 'src', 'views', 'index.html'))
 
     ipcMain.on('client-window', () => {
         clienteWindow()
@@ -47,11 +49,13 @@ function clienteWindow() {
             parent: main,
             modal: true,
             webPreferences: {
-                preload: path.join(__dirname, 'preload.js')
+                preload: path.join(__dirname, 'preload.js'),
+                contextIsolation: true,
+                nodeIntegration: false
             }
         })
     }
-    client.loadFile('./src/views/cliente.html')
+    client.loadFile(path.join(__dirname, 'src', 'views', 'cliente.html'))
     client.center()
 }
 
@@ -68,11 +72,13 @@ function osWindow() {
             parent: main,
             modal: true,
             webPreferences: {
-                preload: path.join(__dirname, 'preload.js')
+                preload: path.join(__dirname, 'preload.js'),
+                contextIsolation: true,
+                nodeIntegration: false
             }
         })
     }
-    osScreen.loadFile('./src/views/os.html')
+    osScreen.loadFile(path.join(__dirname, 'src', 'views', 'os.html'))
     osScreen.center()
 }
 
@@ -90,12 +96,14 @@ function aboutWindow() {
             parent: main,
             modal: true,
             webPreferences: {
-                preload: path.join(__dirname, 'preload.js')
+                preload: path.join(__dirname, 'preload.js'),
+                contextIsolation: true,
+                nodeIntegration: false
             }
         })
     }
 
-    about.loadFile('./src/views/sobre.html')
+    about.loadFile(path.join(__dirname, 'src', 'views', 'sobre.html'))
 }
 
 app.whenReady().then(() => {
