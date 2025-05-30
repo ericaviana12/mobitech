@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MobiTech - Ordem de serviço</title>
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+</head>
+
+<body>
+    <div class="container">
+        <form class="mt-1 row g-3" id="frmOS">
+
+            <div class="container mt-2">
+                <div class="mb-2 row">
+                    <div class="col-sm-4">
+                        <label for="inputSearchClient" class="form-label">Buscar Cliente</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="inputSearchClient" spellcheck="false"
+                                maxlength="30">
+                            <span class="input-group-text">
+                                <img src="../public/img/search.png" alt="lupa" width="20">
+                            </span>
+                        </div>
+                        <ul id="viewListSuggestion" class="list-group suggestion-list"></ul>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label">Nº OS</label>
+                        <input type="text" class="form-control" id="inputOS" disabled>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label">Data de entrada</label>
+                        <input type="text" class="form-control" id="inputData" disabled>
+                    </div>
+                </div>
+
+                <div class="mb-2 row">
+
+                    <div class="col-sm-4">
+                        <label for="inputIdClient" class="form-label">Id do cliente</label>
+                        <input type="text" class="form-control" id="inputIdClient" spellcheck="false" maxlength="15"
+                            disabled>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="inputNameClient" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="inputNameClient" spellcheck="false" maxlength="30"
+                            disabled>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="inputPhoneClient" class="form-label">Telefone</label>
+                        <input type="tel" class="form-control" id="inputPhoneClient" spellcheck="false" maxlength="15"
+                            oninput="mascaraTelefone(this)" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <input type="text" id="idClient">
+
+            <fieldset class="border p-4 mt-4">
+                <div class="mb-2 row">
+                    <div class="col-sm-6">
+                        <label class="form-label">Status da OS</label>
+                        <select class="form-select" id="inputStatus" required>
+                            <option value="">Selecione</option>
+                            <option>Aberta</option>
+                            <option>Em andamento</option>
+                            <option>Aguardando material</option>
+                            <option>Finalizada</option>
+                            <option>Cancelada</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label" for="inputFurniture">Tipo de móvel</label>
+                        <input type="text" class="form-control" id="inputFurniture" maxlength="44" required>
+                    </div>
+                </div>
+
+                <div class="mb-2 row">
+                    <div class="col-sm-4">
+                        <label class="form-label" for="inputModel">Modelo / Marca do móvel</label>
+                        <input type="text" class="form-control" id="inputModel" maxlength="20">
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label" for="inputVolumes">Número de volumes</label>
+                        <input type="number" class="form-control" id="inputVolumes" step="1" min="1" required>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label" for="inputEnvironment">Ambiente de montagem</label>
+                        <input type="text" class="form-control" id="inputEnvironment" maxlength="35">
+                    </div>
+                </div>
+
+                <div class="mb-2 row">
+                    <div class="col-sm-6">
+                        <label class="form-label" for="inputProblem">Problemas relatados / Detalhes do cliente</label>
+                        <input type="text" class="form-control" id="inputProblem" maxlength="54" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label class="form-label" for="inputMaterial">Material necessário</label>
+                        <input type="text" class="form-control" id="inputMaterial" maxlength="80">
+                    </div>
+                </div>
+
+                <div class="mb-2 row">
+                    <div class="col-sm-4">
+                        <label class="form-label" for="inputSpecialist">Montador responsável</label>
+                        <input type="text" class="form-control" id="inputSpecialist" maxlength="20">
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label" for="inputObs">Observações</label>
+                        <input type="text" class="form-control" id="inputObs" maxlength="35">
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label class="form-label" for="inputTotal">Valor</label>
+                        <input type="number" class="form-control" id="inputTotal" step="0.01" min="0">
+                    </div>
+                </div>
+
+                <div class="mt-2 d-flex justify-content-center gap-1">
+                    <button type="submit" class="btn btn-success os-button" id="btnCreate">Gerar OS</button>
+                    <button type="submit" class="btn btn-warning os-button" id="btnUpdate">Editar OS</button>
+                    <button type="button" class="btn btn-danger os-button" id="btnDelete" onclick="removeOS()">Excluir
+                        OS</button>
+                    <button type="reset" class="btn os-button" id="btnReset" onclick="resetForm()"></button>
+                    <button type="button" class="btn btn-primary os-button" onclick="findOS()" id="btnBuscaOS">Buscar
+                        OS</button>
+                    <button type="button" class="btn btn-secondary os-button" id="btnPrintOS">Imprimir OS</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <script src="../public/js/bootstrap.min.js"></script>
+    <script src="./rendererOs.js"></script>
+</body>
+
+</html>
